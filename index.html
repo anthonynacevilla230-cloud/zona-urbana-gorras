@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zona Urbana Caps & Headwear</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <style>
+        :root {
+            --bg-dark: #121212;
+            --bg-card: #1e1e1e;
+            --accent-yellow: #f5b700;
+            --text-white: #ffffff;
+            --text-gray: #a0a0a0;
+            --border-color: #333333;
+            --success-green: #27ae60;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
+        body { background-color: var(--bg-dark); color: var(--text-white); line-height: 1.6; }
+        a { text-decoration: none; color: inherit; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        /* --- BARRA DE LOGO (BLANCA) --- */
+        .brand-bar { background-color: #ffffff; padding: 15px 0; border-bottom: 3px solid var(--accent-yellow); }
+        .brand-container { display: flex; align-items: center; justify-content: center; gap: 15px; max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .brand-logo-icon { background-color: var(--accent-yellow); color: #000; width: 60px; height: 60px; border-radius: 15px; display: flex; justify-content: center; align-items: center; font-size: 2rem; box-shadow: 0 4px 10px rgba(245, 183, 0, 0.4); }
+        .brand-text { display: flex; flex-direction: column; line-height: 1.1; }
+        .brand-name { font-weight: 900; font-size: 2.2rem; color: #121212; letter-spacing: 2px; text-transform: uppercase; }
+        .brand-name span { color: var(--accent-yellow); }
+        .brand-sub { font-weight: 700; font-size: 0.8rem; color: #555; letter-spacing: 5px; text-transform: uppercase; margin-top: 2px; }
+
+        /* BANNER SUPERIOR (ENVÍOS) */
+        .top-banner { background-color: var(--accent-yellow); color: #000; text-align: center; padding: 10px 0; font-weight: 700; font-size: 0.9rem; text-transform: uppercase; }
+
+        /* NAVEGACIÓN */
+        header { background-color: rgba(18, 18, 18, 0.95); border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 1000; }
+        .nav-container { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; max-width: 1200px; margin: 0 auto; }
+        .nav-links { display: flex; gap: 20px; font-size: 0.9rem; font-weight: 600; }
+        .nav-links a:hover { color: var(--accent-yellow); }
+        .nav-icons { display: flex; gap: 15px; align-items: center; }
+        .btn-admin { border: 1px solid var(--accent-yellow); padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; display: flex; align-items: center; gap: 5px; cursor: pointer; background: transparent; color: var(--accent-yellow); }
+        .btn-admin:hover { background-color: var(--accent-yellow); color: #000; }
+
+        /* CARRITO FLOTANTE (LADO DERECHO) */
+        .cart-sidebar {
+            position: fixed;
+            top: 0;
+            right: -450px;
+            width: 420px;
+            height: 100vh;
+            background-color: #1a1a1a;
+            border-left: 1px solid var(--border-color);
+            z-index: 3000;
+            transition: right 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            box-shadow: -5px 0 15px rgba(0,0,0,0.5);
+            overflow-y: auto;
+        }
+        .cart-sidebar.open { right: 0; }
+        .cart-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; margin-bottom: 15px; }
+        .cart-header h3 { color: var(--accent-yellow); font-size: 1.2rem; }
+        .btn-close-cart { background: transparent; border: none; color: white; font-size: 1.5rem; cursor: pointer; }
+        
+        .cart-items { flex: 1; overflow-y: auto; margin-bottom: 15px; max-height: 250px; }
+        .cart-item { display: flex; justify-content: space-between; align-items: center; background: #222; padding: 10px; border-radius: 5px; margin-bottom: 10px; }
+        .cart-item-info { display: flex; flex-direction: column; }
+        .cart-item-title { font-size: 0.9rem; font-weight: 700; }
+        .cart-item-price { font-size: 0.8rem; color: var(--accent-yellow); }
+        .btn-remove-item { background: transparent; border: none; color: #e74c3c; cursor: pointer; font-size: 1rem; }
+
+        /* FORMULARIO DE FACTURACIÓN */
+        .billing-form { border-top: 1px solid var(--border-color); padding-top: 15px; margin-bottom: 15px; }
+        .billing-form h4 { color: var(--accent-yellow); font-size: 0.9rem; margin-bottom: 10px; text-transform: uppercase; }
+        .billing-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .billing-full { grid-column: span 2; }
+        .billing-group label { display: block; font-size: 0.7rem; color: var(--text-gray); margin-bottom: 4px; }
+        .billing-group input, .billing-group select { width: 100%; padding: 8px; border-radius: 5px; border: 1px solid var(--border-color); background: #151515; color: white; font-size: 0.85rem; }
+        .billing-group input:focus, .billing-group select:focus { outline: none; border-color: var(--accent-yellow); }
+
+        /* OPCIONES DE PAGO Y ENTREGA */
+        .options-row { display: flex; gap: 10px; margin-top: 5px; }
+        .option-btn { flex: 1; background: #222; border: 1px solid var(--border-color); color: var(--text-white); padding: 8px; border-radius: 5px; font-size: 0.75rem; cursor: pointer; transition: all 0.2s; text-align: center; }
+        .option-btn:hover { border-color: var(--accent-yellow); }
+        .option-btn.active { background: var(--accent-yellow); color: #000; border-color: var(--accent-yellow); font-weight: 700; }
+        .option-note { font-size: 0.7rem; color: var(--accent-yellow); margin-top: 5px; display: none; }
+
+        .cart-totals { border-top: 1px solid var(--border-color); padding-top: 15px; }
+        .total-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9rem; color: var(--text-gray); }
+        .total-row.discount { color: var(--success-green); }
+        .total-row.final { font-size: 1.2rem; font-weight: 900; color: white; margin-top: 10px; border-top: 1px solid var(--border-color); padding-top: 10px; }
+
+        .btn-checkout { background-color: var(--accent-yellow); color: #000; border: none; padding: 15px; border-radius: 5px; font-weight: 900; cursor: pointer; width: 100%; font-size: 1rem; display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 15px; transition: background-color 0.3s; }
+        .btn-checkout:hover { background-color: #e0a800; }
+
+        /* MODAL DE AGRADECIMIENTO ANIMADO */
+        .thankyou-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 5000; justify-content: center; align-items: center; flex-direction: column; text-align: center; }
+        .thankyou-modal.active { display: flex; }
+        .thankyou-box { background: var(--bg-card); border: 2px solid var(--accent-yellow); border-radius: 20px; padding: 40px; max-width: 450px; box-shadow: 0 20px 50px rgba(0,0,0,0.8); }
+        .thankyou-box i { font-size: 4rem; color: var(--accent-yellow); margin-bottom: 20px; animation: bounce 1s infinite; }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+        .thankyou-box h2 { color: var(--accent-yellow); margin-bottom: 10px; }
+        .thankyou-box p { color: var(--text-gray); margin-bottom: 20px; }
+        .btn-close-thankyou { background: var(--accent-yellow); color: #000; border: none; padding: 12px 30px; border-radius: 5px; font-weight: 700; cursor: pointer; }
+
+        /* CATÁLOGO */
+        .catalog-section { padding: 40px 0; }
+        .catalog-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 30px; }
+        .catalog-header h2 { font-size: 2.5rem; font-weight: 900; text-transform: uppercase; }
+        .catalog-filters { display: flex; gap: 10px; flex-wrap: wrap; }
+        .filter-btn { background-color: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-white); padding: 8px 15px; border-radius: 20px; font-size: 0.8rem; cursor: pointer; }
+        .filter-btn.active { background-color: var(--accent-yellow); color: #000; border-color: var(--accent-yellow); font-weight: 700; }
+
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .product-card { background-color: var(--bg-card); border-radius: 10px; overflow: hidden; border: 1px solid var(--border-color); position: relative; }
+        
+        .product-img-container { width: 100%; height: 250px; position: relative; overflow: hidden; background: #fff; }
+        .product-img-container img { width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 0.3s ease; }
+        .product-img-container img.active { opacity: 1; }
+        
+        .carousel-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; z-index: 5; display: flex; justify-content: center; align-items: center; }
+        .carousel-btn.prev { left: 5px; }
+        .carousel-btn.next { right: 5px; }
+        .carousel-btn:hover { background: var(--accent-yellow); color: #000; }
+
+        .tag { position: absolute; top: 10px; left: 10px; background-color: var(--accent-yellow); color: #000; padding: 3px 8px; font-size: 0.7rem; font-weight: 700; border-radius: 3px; z-index: 10; }
+        .product-info { padding: 15px; }
+        .product-price { font-size: 1.2rem; font-weight: 700; display: flex; justify-content: space-between; align-items: center; }
+        .btn-add { background-color: #333; border: none; color: white; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: 600; }
+        .btn-add:hover { background-color: var(--accent-yellow); color: #000; }
+
+        /* ADMIN PANEL */
+        .admin-panel { display: none; background-color: #1a1a1a; border: 1px solid var(--accent-yellow); border-radius: 10px; padding: 20px; margin: 20px auto; max-width: 800px; position: relative; }
+        .admin-panel.active { display: block; }
+        .admin-panel h3 { color: var(--accent-yellow); margin-bottom: 15px; }
+        
+        .btn-logout { position: absolute; top: 20px; right: 20px; background-color: transparent; border: 1px solid #e74c3c; color: #e74c3c; padding: 5px 15px; border-radius: 20px; cursor: pointer; font-size: 0.8rem; font-weight: 700; display: flex; align-items: center; gap: 5px; }
+        .btn-logout:hover { background-color: #e74c3c; color: white; }
+
+        .upload-area { border: 2px dashed var(--border-color); padding: 30px; text-align: center; border-radius: 10px; cursor: pointer; margin-bottom: 15px; }
+        .upload-area:hover { border-color: var(--accent-yellow); }
+        .upload-area input[type="file"] { display: none; }
+        .upload-area i { font-size: 2rem; color: var(--accent-yellow); margin-bottom: 10px; }
+        .upload-area p { color: var(--text-gray); font-size: 0.9rem; }
+        .btn-upload { background-color: var(--accent-yellow); color: #000; border: none; padding: 10px 20px; border-radius: 5px; font-weight: 700; cursor: pointer; width: 100%; margin-top: 10px; }
+
+        .admin-product-list { margin-top: 20px; border-top: 1px solid var(--border-color); padding-top: 15px; }
+        .admin-product-item { display: flex; justify-content: space-between; align-items: center; background: #222; padding: 10px; margin-bottom: 10px; border-radius: 5px; flex-wrap: wrap; gap: 10px; }
+        .admin-product-item input { background: #333; border: 1px solid #444; color: white; padding: 5px; border-radius: 3px; width: 80px; }
+        .admin-product-item input[type="text"] { width: 120px; }
+        .admin-product-item button { background: #e74c3c; border: none; color: white; padding: 5px 10px; border-radius: 3px; cursor: pointer; }
+        
+        .admin-thumbs { display: flex; gap: 5px; align-items: center; }
+        .admin-thumbs img { width: 35px; height: 35px; object-fit: cover; border-radius: 3px; border: 1px solid #444; }
+        .btn-add-photo { background: var(--accent-yellow); color: #000; border: none; padding: 5px 8px; border-radius: 3px; cursor: pointer; font-size: 0.7rem; font-weight: 700; }
+
+        /* MODAL DE LOGIN */
+        .login-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); z-index: 4000; justify-content: center; align-items: center; }
+        .login-modal.active { display: flex; }
+        .login-box { background-color: var(--bg-card); border: 1px solid var(--accent-yellow); border-radius: 10px; padding: 30px; width: 100%; max-width: 400px; text-align: center; }
+        .login-box h3 { color: var(--accent-yellow); margin-bottom: 20px; }
+        .login-box input { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 5px; border: 1px solid var(--border-color); background-color: #151515; color: white; font-size: 1rem; }
+        .login-box button { width: 100%; padding: 12px; background-color: var(--accent-yellow); color: #000; border: none; border-radius: 5px; font-weight: 700; cursor: pointer; font-size: 1rem; }
+        .error-msg { color: #e74c3c; font-size: 0.8rem; margin-bottom: 10px; display: none; }
+
+        /* HERO */
+        .hero { text-align: center; padding: 80px 20px; background: radial-gradient(circle at center, #2a2a2a 0%, #121212 70%); }
+        .hero-badge { display: inline-block; border: 1px solid var(--accent-yellow); color: var(--accent-yellow); padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; margin-bottom: 20px; }
+        .hero h1 { font-size: 3rem; font-weight: 900; margin-bottom: 20px; text-transform: uppercase; }
+        .hero h1 span { color: var(--accent-yellow); }
+        .hero p { color: var(--text-gray); max-width: 600px; margin: 0 auto 30px; font-size: 1.1rem; }
+        .hero-buttons { display: flex; justify-content: center; gap: 15px; }
+        .btn-primary { background-color: var(--accent-yellow); color: #000; padding: 12px 25px; border-radius: 5px; font-weight: 700; display: flex; align-items: center; gap: 10px; border: none; cursor: pointer; }
+        .btn-secondary { background-color: transparent; border: 1px solid var(--border-color); color: var(--text-white); padding: 12px 25px; border-radius: 5px; font-weight: 700; display: flex; align-items: center; gap: 10px; cursor: pointer; }
+
+        .features-bar { display: flex; justify-content: space-around; padding: 20px; border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); max-width: 1200px; margin: 0 auto 40px; }
+        .feature-item { display: flex; align-items: center; gap: 10px; font-size: 0.9rem; color: var(--text-gray); }
+        .feature-item i { color: var(--accent-yellow); }
+
+        /* SIMULADOR 3D */
+        .custom-section { padding: 60px 0; background-color: #0a0a0a; }
+        .custom-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
+        .custom-text h2 { font-size: 2.5rem; font-weight: 900; margin-bottom: 20px; }
+        .custom-text p { color: var(--text-gray); margin-bottom: 30px; }
+        .step-list { list-style: none; }
+        .step-list li { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; font-weight: 600; }
+        .step-num { background-color: var(--accent-yellow); color: #000; width: 25px; height: 25px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 0.8rem; font-weight: 900; }
+
+        .simulator-box { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 10px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .simulator-header { font-size: 1.1rem; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        .simulator-content { display: grid; grid-template-columns: 1.2fr 1fr; gap: 20px; }
+        
+        .preview-area { background-color: #151515; border: 1px solid #2a2a2a; border-radius: 8px; position: relative; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 280px; overflow: hidden; }
+        .preview-label { position: absolute; top: 10px; left: 15px; font-size: 0.7rem; color: var(--text-gray); text-transform: uppercase; letter-spacing: 1px; }
+        
+        .cap-mockup { position: relative; width: 200px; height: 120px; margin-top: 20px; transition: all 0.3s ease; }
+        .cap-crown { width: 100%; height: 100%; background-color: #333; border-radius: 100px 100px 10px 10px; position: relative; transition: background-color 0.3s ease; }
+        .cap-brim { width: 120%; height: 40px; background-color: #222; border-radius: 0 0 50px 50px; position: absolute; bottom: -10px; left: -10%; transform: rotateX(20deg); box-shadow: 0 5px 10px rgba(0,0,0,0.5); transition: background-color 0.3s ease; }
+        .cap-button { width: 12px; height: 12px; background-color: var(--accent-yellow); border-radius: 50%; position: absolute; top: 5px; left: 50%; transform: translateX(-50%); z-index: 2; }
+        .embroidery-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-weight: 900; font-size: 1.5rem; color: var(--accent-yellow); text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000; z-index: 10; transition: color 0.3s ease; text-transform: uppercase; letter-spacing: 2px; }
+
+        .simulator-controls { display: flex; flex-direction: column; gap: 15px; }
+        .input-group label { display: block; font-size: 0.8rem; color: var(--text-gray); margin-bottom: 8px; font-weight: 600; }
+        .input-group input { width: 100%; background-color: #151515; border: 1px solid var(--border-color); color: white; padding: 10px 15px; border-radius: 5px; font-size: 1rem; font-weight: 700; }
+        .input-group input:focus { outline: none; border-color: var(--accent-yellow); }
+        .color-options { display: flex; gap: 12px; margin-bottom: 5px; }
+        .color-circle { width: 35px; height: 35px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; transition: transform 0.2s; }
+        .color-circle:hover { transform: scale(1.1); }
+        .color-circle.active { border-color: var(--accent-yellow); box-shadow: 0 0 10px rgba(245, 183, 0, 0.5); }
+        .btn-cotizar { background-color: var(--accent-yellow); color: #000; border: none; padding: 15px; border-radius: 5px; font-weight: 900; font-size: 1rem; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 10px; transition: background-color 0.3s; }
+        .btn-cotizar:hover { background-color: #e0a800; }
+
+        /* GUÍA DE CUIDADO */
+        .care-section { padding: 60px 0; }
+        .care-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .care-card { background-color: var(--bg-card); padding: 25px; border-radius: 10px; border: 1px solid var(--border-color); }
+        .care-icon { font-size: 2rem; color: var(--accent-yellow); margin-bottom: 15px; }
+        .care-card h3 { margin-bottom: 10px; font-size: 1.1rem; }
+        .care-card p, .care-card ul { font-size: 0.9rem; color: var(--text-gray); }
+        .care-card ul { padding-left: 20px; margin-top: 10px; }
+
+        /* FOOTER */
+        footer { background-color: #0a0a0a; border-top: 1px solid var(--border-color); padding: 50px 0 20px; margin-top: 50px; }
+        .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 30px; margin-bottom: 40px; }
+        .footer-col h4 { color: var(--text-white); margin-bottom: 20px; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }
+        .footer-col ul { list-style: none; }
+        .footer-col ul li { margin-bottom: 10px; font-size: 0.9rem; color: var(--text-gray); }
+        .footer-col ul li a:hover { color: var(--accent-yellow); }
+        .footer-logo { display: flex; align-items: center; gap: 10px; font-weight: 900; font-size: 1.2rem; margin-bottom: 15px; }
+        .footer-logo span { color: var(--accent-yellow); }
+        .social-icons { display: flex; gap: 15px; margin-top: 20px; }
+        .social-icons a { color: var(--text-gray); font-size: 1.2rem; }
+        .social-icons a:hover { color: var(--accent-yellow); }
+
+        @media (max-width: 992px) { .simulator-content { grid-template-columns: 1fr; } .custom-grid { grid-template-columns: 1fr; } .footer-grid { grid-template-columns: 1fr 1fr; } .cart-sidebar { width: 100%; right: -100%; } }
+        @media (max-width: 768px) { .nav-links { display: none; } .hero h1 { font-size: 2rem; } .features-bar { flex-direction: column; gap: 15px; align-items: flex-start; } .catalog-header { flex-direction: column; align-items: flex-start; gap: 15px; } .care-grid { grid-template-columns: 1fr; } .footer-grid { grid-template-columns: 1fr; gap: 40px; } .brand-name { font-size: 1.5rem; } .brand-logo-icon { width: 45px; height: 45px; font-size: 1.5rem; } .btn-logout { top: 10px; right: 10px; padding: 3px 10px; font-size: 0.7rem; } .billing-grid { grid-template-columns: 1fr; } .billing-full { grid-column: span 1; } .options-row { flex-direction: column; } }
+    </style>
+</head>
+<body>
+
+    <!-- BARRA DE LOGO (BLANCA) -->
+    <div class="brand-bar">
+        <div class="brand-container">
+            <div class="brand-logo-icon">
+                <i class="fas fa-hat-cowboy"></i>
+            </div>
+            <div class="brand-text">
+                <div class="brand-name">ZONA URBANA <span>CAPS</span></div>
+                <div class="brand-sub">Caps & Headwear</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BANNER DE ENVÍOS -->
+    <div class="top-banner">
+        <i class="fas fa-truck"></i> ¡TODOS LOS ENVÍOS SON GRATIS Y GARANTIZADOS! | 10% OFF PAGANDO CON TRANSFERENCIA
+    </div>
+
+    <!-- NAVEGACIÓN -->
+    <header>
+        <div class="nav-container">
+            <nav class="nav-links">
+                <a href="#">Todos</a>
+                <a href="#">Snapback</a>
+                <a href="#">Trucker</a>
+                <a href="#">Béisbol / Curved</a>
+                <a href="#">Gorros / Beanies</a>
+                <a href="#" style="color: var(--accent-yellow);">Custom 3D</a>
+            </nav>
+            <div class="nav-icons">
+                <button class="btn-admin" id="toggleAdmin"><i class="fas fa-user"></i> Admin</button>
+                <button class="btn-admin" id="toggleCart" style="background: var(--accent-yellow); color: #000;"><i class="fas fa-shopping-cart"></i> Carrito <span id="cartCount" style="background: #000; color: #fff; border-radius: 50%; padding: 2px 8px; font-size: 0.7rem; margin-left: 5px;">0</span></button>
+            </div>
+        </div>
+    </header>
+
+    <!-- CARRITO FLOTANTE (LADO DERECHO) -->
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h3><i class="fas fa-shopping-cart"></i> Facturación</h3>
+            <button class="btn-close-cart" id="closeCartBtn">&times;</button>
+        </div>
+        
+        <div class="cart-items" id="cartItems">
+            <!-- Los items se cargarán aquí -->
+            <p style="color: var(--text-gray); text-align: center; margin-top: 20px;">Tu carrito está vacío.</p>
+        </div>
+
+        <!-- FORMULARIO DE FACTURACIÓN (DATOS DEL SRI) -->
+        <div class="billing-form">
+            <h4><i class="fas fa-user-circle"></i> Datos del Comprador</h4>
+            <div class="billing-grid">
+                <div class="billing-group">
+                    <label>RUC / Cédula *</label>
+                    <input type="text" id="clientRuc" placeholder="Ej: 1712345678001">
+                </div>
+                <div class="billing-group">
+                    <label>Teléfono *</label>
+                    <input type="tel" id="clientPhone" placeholder="Ej: 0991234567">
+                </div>
+                <div class="billing-group billing-full">
+                    <label>Nombres y Apellidos / Razón Social *</label>
+                    <input type="text" id="clientName" placeholder="Ingresa tu nombre completo o empresa">
+                </div>
+                <div class="billing-group billing-full">
+                    <label>Dirección *</label>
+                    <input type="text" id="clientAddress" placeholder="Calle principal y secundaria, ciudad">
+                </div>
+                <div class="billing-group billing-full">
+                    <label>Correo Electrónico *</label>
+                    <input type="email" id="clientEmail" placeholder="tucorreo@ejemplo.com">
+                </div>
+            </div>
+        </div>
+
+        <!-- OPCIONES DE PAGO -->
+        <div class="billing-form">
+            <h4><i class="fas fa-credit-card"></i> Método de Pago</h4>
+            <div class="options-row" id="paymentOptions">
+                <button type="button" class="option-btn" data-payment="transferencia">Transferencia</button>
+                <button type="button" class="option-btn" data-payment="efectivo">Efectivo</button>
+                <button type="button" class="option-btn" data-payment="tarjeta">Tarjeta</button>
+            </div>
+            <div id="paymentNote" class="option-note"></div>
+        </div>
+
+        <!-- OPCIONES DE ENTREGA -->
+        <div class="billing-form">
+            <h4><i class="fas fa-truck"></i> Método de Entrega</h4>
+            <div class="options-row" id="deliveryOptions">
+                <button type="button" class="option-btn active" data-delivery="envio">Envío a Domicilio</button>
+                <button type="button" class="option-btn" data-delivery="retiro">Retiro en Establecimiento</button>
+            </div>
+            <div id="deliveryNote" class="option-note" style="color: var(--success-green); display: none;">
+                <i class="fas fa-check-circle"></i> ¡Genial! Al retirar en el establecimiento, recibes un <strong>5% de descuento</strong>.
+            </div>
+        </div>
+
+        <div class="cart-totals">
+            <div class="total-row">
+                <span>Subtotal:</span>
+                <span id="subtotal">$0.00</span>
+            </div>
+            <div class="total-row discount" id="discountRow" style="display: none;">
+                <span>Descuento (5%):</span>
+                <span id="discountAmount">-$0.00</span>
+            </div>
+            <div class="total-row">
+                <span>IVA (0%):</span>
+                <span id="iva">$0.00</span>
+            </div>
+            <div class="total-row final">
+                <span>Total:</span>
+                <span id="total">$0.00</span>
+            </div>
+        </div>
+
+        <!-- BOTÓN DE ENVIAR PEDIDO POR WHATSAPP -->
+        <button class="btn-checkout" id="checkoutBtn">
+            <i class="fab fa-whatsapp" style="font-size: 1.2rem;"></i> Enviar Pedido por WhatsApp
+        </button>
+    </div>
+
+    <!-- MODAL DE AGRADECIMIENTO ANIMADO -->
+    <div class="thankyou-modal" id="thankyouModal">
+        <div class="thankyou-box">
+            <i class="fas fa-gift"></i>
+            <h2>¡GRACIAS POR TU COMPRA!</h2>
+            <p>Tu pedido ha sido enviado exitosamente. Nos pondremos en contacto contigo a la brevedad.</p>
+            <button class="btn-close-thankyou" id="closeThankyouBtn">Aceptar</button>
+        </div>
+    </div>
+
+    <!-- MODAL DE LOGIN -->
+    <div class="login-modal" id="loginModal">
+        <div class="login-box">
+            <h3><i class="fas fa-lock"></i> Acceso Restringido</h3>
+            <p style="color: var(--text-gray); margin-bottom: 15px; font-size: 0.9rem;">Ingresa la contraseña para administrar el catálogo.</p>
+            <div class="error-msg" id="loginError">Contraseña incorrecta. Inténtalo de nuevo.</div>
+            <input type="password" id="adminPassword" placeholder="Contraseña">
+            <button id="loginBtn">Ingresar</button>
+            <button id="closeLoginBtn" style="background: transparent; color: var(--text-gray); margin-top: 10px; border: 1px solid var(--border-color);">Cancelar</button>
+        </div>
+    </div>
+
+    <!-- PANEL DE ADMINISTRACIÓN -->
+    <div class="container">
+        <div class="admin-panel" id="adminPanel">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h3><i class="fas fa-cloud-upload-alt"></i> Panel de Administración</h3>
+                <button class="btn-logout" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button>
+            </div>
+            
+            <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+                <i class="fas fa-images"></i>
+                <p>Haz clic aquí para seleccionar <strong>2 fotos</strong> por producto (JPG, PNG)</p>
+                <input type="file" id="fileInput" accept="image/*" multiple>
+            </div>
+            <button class="btn-upload" id="uploadBtn"><i class="fas fa-upload"></i> Subir Imágenes</button>
+
+            <div class="admin-product-list" id="adminProductList">
+                <h4 style="color: var(--accent-yellow); margin-bottom: 10px;">Editar Productos</h4>
+                <!-- Aquí se cargarán los inputs para editar -->
+            </div>
+        </div>
+    </div>
+
+    <section class="hero">
+        <div class="hero-badge"><i class="fas fa-fire"></i> NUEVA COLECCIÓN STREETWEAR 2026</div>
+        <h1>EL ESTILO SE LLEVA EN LA <span>CABEZA.</span></h1>
+        <p>Gorras urbanas prémium con acabados de alta definición, bordados 3D y los mejores encajes Snapback, Flexfit y Dad Hats. Domina las calles con Zona Urbana.</p>
+        <div class="hero-buttons">
+            <a href="#" class="btn-primary">Explorar Gorras <i class="fas fa-arrow-right"></i></a>
+            <a href="#" class="btn-secondary"><i class="fas fa-paint-brush"></i> Personalizar Gorra</a>
+        </div>
+    </section>
+
+    <div class="features-bar">
+        <div class="feature-item"><i class="fas fa-shield-alt"></i> 100% Originales</div>
+        <div class="feature-item"><i class="fas fa-box"></i> Empaque Rígido</div>
+        <div class="feature-item"><i class="fas fa-undo"></i> Cambios Garantizados</div>
+    </div>
+
+    <section class="catalog-section container">
+        <div class="catalog-header">
+            <div>
+                <h2>CATÁLOGO DE GORRAS</h2>
+                <p style="color: var(--text-gray); font-size: 0.9rem;">Filtra entre viseras planas, curvadas, truckers y beanies urbanos</p>
+            </div>
+            <div class="catalog-filters">
+                <button class="filter-btn active">TODAS</button>
+                <button class="filter-btn">SNAPBACKS</button>
+                <button class="filter-btn">TRUCKER</button>
+                <button class="filter-btn">CURVED / DAD</button>
+                <button class="filter-btn">GORROS / BEANIES</button>
+            </div>
+        </div>
+
+        <div class="product-grid" id="productGrid">
+            <!-- Los productos se cargarán dinámicamente aquí -->
+        </div>
+    </section>
+
+    <section class="custom-section">
+        <div class="container custom-grid">
+            <div class="custom-text">
+                <div class="hero-badge" style="margin-bottom: 10px;">SERVICIO VIP EXCLUSIVO</div>
+                <h2>PERSONALIZA TU GORRA CON BORDADO 3D</h2>
+                <p>¿Tienes una marca, equipo o logo propio? En Zona Urbana realizamos bordados de alta densidad en hilos metálicos, mate o fluorescentes sobre cualquier estilo de gorra.</p>
+                <ul class="step-list">
+                    <li><span class="step-num">1</span> Elige la base: Selecciona Snapback, Trucker o Dad Hat.</li>
+                    <li><span class="step-num">2</span> Escribe tu texto/iniciales: Previsualiza tu diseño en directo.</li>
+                    <li><span class="step-num">3</span> Envía a Producción: Recíbela en tu puerta en 72 horas.</li>
+                </ul>
+            </div>
+            
+            <div class="simulator-box">
+                <div class="simulator-header">
+                    <i class="fas fa-magic" style="color: var(--accent-yellow);"></i> Simulador de Bordado en Vivo
+                </div>
+                
+                <div class="simulator-content">
+                    <div class="preview-area">
+                        <div class="preview-label">VISTA PREVIA FRONTAL</div>
+                        <div class="cap-mockup">
+                            <div class="cap-crown" id="capCrown">
+                                <div class="cap-button"></div>
+                            </div>
+                            <div class="cap-brim" id="capBrim"></div>
+                            <div class="embroidery-text" id="embroideryPreview">URBAN</div>
+                        </div>
+                    </div>
+
+                    <div class="simulator-controls">
+                        <div class="input-group">
+                            <label>Texto para Bordado Frontal:</label>
+                            <input type="text" id="inputText" value="URBAN" maxlength="10" placeholder="Escribe aquí...">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label>Color de Gorra:</label>
+                            <div class="color-options" id="capColorOptions">
+                                <div class="color-circle active" style="background-color: #333;" data-color="#333" onclick="changeCapColor(this)"></div>
+                                <div class="color-circle" style="background-color: #1a237e;" data-color="#1a237e" onclick="changeCapColor(this)"></div>
+                                <div class="color-circle" style="background-color: #880e4f;" data-color="#880e4f" onclick="changeCapColor(this)"></div>
+                                <div class="color-circle" style="background-color: #1b5e20;" data-color="#1b5e20" onclick="changeCapColor(this)"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label>Color de Hilo (Bordado 3D):</label>
+                            <div class="color-options" id="threadColorOptions">
+                                <div class="color-circle active" style="background-color: #f5b700;" data-color="#f5b700" onclick="changeThreadColor(this)"></div>
+                                <div class="color-circle" style="background-color: #ffffff;" data-color="#ffffff" onclick="changeThreadColor(this)"></div>
+                                <div class="color-circle" style="background-color: #e91e63;" data-color="#e91e63" onclick="changeThreadColor(this)"></div>
+                                <div class="color-circle" style="background-color: #03a9f4;" data-color="#03a9f4" onclick="changeThreadColor(this)"></div>
+                            </div>
+                        </div>
+                        
+                        <button class="btn-cotizar"><i class="fas fa-clock"></i> Cotizar Gorra Personalizada</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="care-section container">
+        <div style="text-align: center; margin-bottom: 40px;">
+            <h2>GUÍA DE CUIDADO & AJUSTES</h2>
+            <p style="color: var(--text-gray);">Mantén la visera firme y los bordados impecables como el primer día</p>
+        </div>
+        <div class="care-grid">
+            <div class="care-card">
+                <div class="care-icon"><i class="fas fa-hand-holding-water"></i></div>
+                <h3>Lavado a Mano Siempre</h3>
+                <p>Nunca introduzcas tu gorra en la lavadora. Utiliza un cepillo de cerdas suaves con agua tibia y jabón neutro únicamente en las zonas manchadas.</p>
+            </div>
+            <div class="care-card">
+                <div class="care-icon"><i class="fas fa-wind"></i></div>
+                <h3>Secado Antideformación</h3>
+                <p>Para secarla, coloca un tazón o una pelota dentro de la corona para que mantenga su estructura 3D original mientras se seca a la sombra.</p>
+            </div>
+            <div class="care-card">
+                <div class="care-icon"><i class="fas fa-ruler-combined"></i></div>
+                <h3>Sistema de Tallas</h3>
+                <ul>
+                    <li><strong>Snapback/Trucker:</strong> Cierre de broche ajustable (54cm - 61cm).</li>
+                    <li><strong>Flexfit S/M:</strong> (55cm - 58cm).</li>
+                    <li><strong>Flexfit L/XL:</strong> (58cm - 62cm).</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container footer-grid">
+            <div class="footer-col">
+                <div class="footer-logo">
+                    <i class="fas fa-hat-cowboy" style="color: var(--accent-yellow); font-size: 1.5rem;"></i>
+                    ZONA URBANA <span>CAPS</span>
+                </div>
+                <p style="color: var(--text-gray); font-size: 0.9rem; margin-bottom: 15px;">La tienda líder en gorras urbanas, Snapbacks originales, Truckers de alta densidad y beanies streetwear.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-tiktok"></i></a>
+                    <a href="#"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>CATEGORÍAS</h4>
+                <ul>
+                    <li><a href="#">Gorras Snapback</a></li>
+                    <li><a href="#">Gorras Trucker Malla</a></li>
+                    <li><a href="#">Dad Hats & Curved Visor</a></li>
+                    <li><a href="#">Beanies & Gorros Tejidos</a></li>
+                    <li><a href="#" style="color: var(--accent-yellow);">Bordados Personalizados 3D</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>ATENCIÓN AL CLIENTE</h4>
+                <ul>
+                    <li><a href="#">Seguimiento de Envíos</a></li>
+                    <li><a href="#">Políticas de Devolución</a></li>
+                    <li><a href="#">Guía de Tallas y Ajustes</a></li>
+                    <li><a href="#">Preguntas Frecuentes</a></li>
+                    <li><a href="#">Ventas al Por Mayor</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>TIENDA FÍSICA & CONTACTO</h4>
+                <ul>
+                    <li><i class="fas fa-map-marker-alt" style="color: var(--accent-yellow);"></i> <strong>Matriz Machachi:</strong> Av. Amazonas y 11 de Noviembre (junto a almacenes Tía).</li>
+                    <li><i class="fas fa-map-marker-alt" style="color: var(--accent-yellow);"></i> <strong>Sucursal Tambillo:</strong> Colectora Tambillo y Av. 13 de Julio (junto al Tuti).</li>
+                    <li><i class="fas fa-phone" style="color: var(--accent-yellow);"></i> <strong>Teléfono / WhatsApp:</strong> 096 410 3218 / +593964103218</li>
+                    <li><i class="fas fa-clock" style="color: var(--accent-yellow);"></i> <strong>Horarios:</strong> Lunes a Domingo de 8:00 AM a 8:00 PM</li>
+                </ul>
+            </div>
+        </div>
+        <div class="container" style="text-align: center; border-top: 1px solid var(--border-color); padding-top: 20px; font-size: 0.8rem; color: var(--text-gray);">
+            &copy; 2026 Zona Urbana Caps. Todos los derechos reservados.
+        </div>
+    </footer>
+
+    <!-- SCRIPT -->
+    <script>
+        // --- CONFIGURACIÓN DE WHATSAPP (TU NÚMERO) ---
+        const WHATSAPP_NUMBER = "593964103218";
+
+        // --- CONFIGURACIÓN DE CONTRASEÑA ---
+        const ADMIN_PASSWORD = "3726";
+
+        // --- VARIABLES GLOBALES ---
+        let cart = [];
+        let isLoggedIn = false;
+        let selectedPayment = null;
+        let selectedDelivery = 'envio'; // Por defecto envío
+
+        // --- PRODUCTOS DE EJEMPLO ---
+        const defaultProducts = [
+            {
+                name: "Cyber Black Snapback",
+                price: "34.99",
+                images: [
+                    "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=400&h=400&fit=crop",
+                    "https://images.unsplash.com/photo-1575428652377-a2d80e2277fc?w=400&h=400&fit=crop"
+                ]
+            },
+            {
+                name: "Streetwear Beige Dad Hat",
+                price: "28.50",
+                images: [
+                    "https://images.unsplash.com/photo-1534215754734-18e55d13e346?w=400&h=400&fit=crop",
+                    "https://images.unsplash.com/photo-1521369909029-2afed882baee?w=400&h=400&fit=crop"
+                ]
+            },
+            {
+                name: "Trucker Clásica Blanca",
+                price: "24.99",
+                images: [
+                    "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=400&h=400&fit=crop",
+                    "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=400&h=400&fit=crop"
+                ]
+            }
+        ];
+
+        // --- LÓGICA DE LOGIN ---
+        const loginModal = document.getElementById('loginModal');
+        const toggleAdminBtn = document.getElementById('toggleAdmin');
+        const loginBtn = document.getElementById('loginBtn');
+        const closeLoginBtn = document.getElementById('closeLoginBtn');
+        const adminPasswordInput = document.getElementById('adminPassword');
+        const loginError = document.getElementById('loginError');
+        const adminPanel = document.getElementById('adminPanel');
+        const logoutBtn = document.getElementById('logoutBtn');
+
+        toggleAdminBtn.addEventListener('click', () => {
+            if (isLoggedIn) {
+                adminPanel.classList.toggle('active');
+                toggleAdminBtn.textContent = adminPanel.classList.contains('active') ? 'Cerrar Admin' : 'Admin';
+            } else {
+                loginModal.classList.add('active');
+                adminPasswordInput.value = '';
+                loginError.style.display = 'none';
+            }
+        });
+
+        loginBtn.addEventListener('click', () => {
+            if (adminPasswordInput.value === ADMIN_PASSWORD) {
+                isLoggedIn = true;
+                loginModal.classList.remove('active');
+                adminPanel.classList.add('active');
+                toggleAdminBtn.textContent = 'Cerrar Admin';
+            } else {
+                loginError.style.display = 'block';
+            }
+        });
+
+        closeLoginBtn.addEventListener('click', () => {
+            loginModal.classList.remove('active');
+        });
+
+        logoutBtn.addEventListener('click', () => {
+            isLoggedIn = false;
+            adminPanel.classList.remove('active');
+            toggleAdminBtn.textContent = 'Admin';
+            alert('Has cerrado sesión correctamente.');
+        });
+
+        window.addEventListener('click', (e) => {
+            if (e.target === loginModal) {
+                loginModal.classList.remove('active');
+            }
+        });
+
+        // --- LÓGICA DEL CARRITO ---
+        const toggleCartBtn = document.getElementById('toggleCart');
+        const closeCartBtn = document.getElementById('closeCartBtn');
+        const cartSidebar = document.getElementById('cartSidebar');
+        const cartItemsContainer = document.getElementById('cartItems');
+        const cartCount = document.getElementById('cartCount');
+        const subtotalSpan = document.getElementById('subtotal');
+        const ivaSpan = document.getElementById('iva');
+        const totalSpan = document.getElementById('total');
+        const discountRow = document.getElementById('discountRow');
+        const discountAmountSpan = document.getElementById('discountAmount');
+        const paymentOptions = document.getElementById('paymentOptions');
+        const paymentNote = document.getElementById('paymentNote');
+        const deliveryOptions = document.getElementById('deliveryOptions');
+        const deliveryNote = document.getElementById('deliveryNote');
+
+        toggleCartBtn.addEventListener('click', () => {
+            cartSidebar.classList.toggle('open');
+        });
+
+        closeCartBtn.addEventListener('click', () => {
+            cartSidebar.classList.remove('open');
+        });
+
+        // --- FUNCIÓN PARA ACTUALIZAR TOTALES (CON DESCUENTO) ---
+        function updateTotals() {
+            let subtotal = 0;
+            cart.forEach(item => {
+                subtotal += item.price * item.quantity;
+            });
+
+            let discount = 0;
+            if (selectedDelivery === 'retiro') {
+                discount = subtotal * 0.05; // 5% de descuento
+            }
+
+            const iva = subtotal * 0.00;
+            const total = subtotal - discount + iva;
+
+            subtotalSpan.textContent = `$${subtotal.toFixed(2)}`;
+            ivaSpan.textContent = `$${iva.toFixed(2)}`;
+
+            if (discount > 0) {
+                discountRow.style.display = 'flex';
+                discountAmountSpan.textContent = `-$${discount.toFixed(2)}`;
+            } else {
+                discountRow.style.display = 'none';
+            }
+
+            totalSpan.textContent = `$${total.toFixed(2)}`;
+            cartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+        }
+
+        function updateCartUI() {
+            cartItemsContainer.innerHTML = '';
+
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = '<p style="color: var(--text-gray); text-align: center; margin-top: 20px;">Tu carrito está vacío.</p>';
+            } else {
+                cart.forEach((item, index) => {
+                    const div = document.createElement('div');
+                    div.className = 'cart-item';
+                    div.innerHTML = `
+                        <div class="cart-item-info">
+                            <span class="cart-item-title">${item.name}</span>
+                            <span class="cart-item-price">$${item.price.toFixed(2)} x ${item.quantity}</span>
+                        </div>
+                        <button class="btn-remove-item" onclick="removeFromCart(${index})"><i class="fas fa-trash"></i></button>
+                    `;
+                    cartItemsContainer.appendChild(div);
+                });
+            }
+            updateTotals();
+        }
+
+        window.addToCart = function(name, price) {
+            const existingItem = cart.find(item => item.name === name);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({ name: name, price: parseFloat(price), quantity: 1 });
+            }
+            updateCartUI();
+            cartSidebar.classList.add('open');
+        };
+
+        window.removeFromCart = function(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        };
+
+        // --- LÓGICA DE SELECCIÓN DE PAGO Y ENTREGA ---
+        paymentOptions.addEventListener('click', (e) => {
+            if (e.target.classList.contains('option-btn')) {
+                // Quitar clase active de todos
+                paymentOptions.querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('active'));
+                // Añadir active al seleccionado
+                e.target.classList.add('active');
+                selectedPayment = e.target.dataset.payment;
+
+                // Mostrar u ocultar nota según el método
+                if (selectedPayment === 'tarjeta') {
+                    paymentNote.style.display = 'block';
+                    paymentNote.innerHTML = '<i class="fas fa-info-circle"></i> Si escoges tarjeta, debes acercarte al establecimiento para hacer el pago.';
+                } else {
+                    paymentNote.style.display = 'none';
+                }
+            }
+        });
+
+        deliveryOptions.addEventListener('click', (e) => {
+            if (e.target.classList.contains('option-btn')) {
+                deliveryOptions.querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('active'));
+                e.target.classList.add('active');
+                selectedDelivery = e.target.dataset.delivery;
+
+                if (selectedDelivery === 'retiro') {
+                    deliveryNote.style.display = 'block';
+                } else {
+                    deliveryNote.style.display = 'none';
+                }
+                updateTotals(); // Recalcular totales
+            }
+        });
+
+        // --- LÓGICA DEL MODAL DE AGRADECIMIENTO ---
+        const thankyouModal = document.getElementById('thankyouModal');
+        const closeThankyouBtn = document.getElementById('closeThankyouBtn');
+
+        closeThankyouBtn.addEventListener('click', () => {
+            thankyouModal.classList.remove('active');
+        });
+
+        // --- LÓGICA DE ENVÍO POR WHATSAPP ---
+        document.getElementById('checkoutBtn').addEventListener('click', () => {
+            // Obtener datos del formulario de facturación
+            const clientName = document.getElementById('clientName').value;
+            const clientRuc = document.getElementById('clientRuc').value;
+            const clientAddress = document.getElementById('clientAddress').value;
+            const clientEmail = document.getElementById('clientEmail').value;
+            const clientPhone = document.getElementById('clientPhone').value;
+
+            // Validaciones
+            if (!clientName || !clientRuc || !clientAddress || !clientEmail || !clientPhone) {
+                alert('Por favor, completa todos los campos obligatorios para la facturación.');
+                return;
+            }
+
+            if (cart.length === 0) {
+                alert('Tu carrito está vacío. Agrega productos antes de enviar el pedido.');
+                return;
+            }
+
+            if (!selectedPayment) {
+                alert('Por favor, selecciona un método de pago.');
+                return;
+            }
+
+            // Calcular totales finales
+            let subtotalPedido = 0;
+            cart.forEach(item => { subtotalPedido += item.price * item.quantity; });
+            
+            let discountPedido = 0;
+            if (selectedDelivery === 'retiro') {
+                discountPedido = subtotalPedido * 0.05;
+            }
+            const totalPedido = subtotalPedido - discountPedido;
+
+            // Construir el mensaje de WhatsApp
+            let message = `*¡NUEVO PEDIDO - ZONA URBANA CAPS!*\n\n`;
+            message += `*DATOS DEL COMPRADOR:*\n`;
+            message += `Nombre: ${clientName}\n`;
+            message += `RUC/Cédula: ${clientRuc}\n`;
+            message += `Dirección: ${clientAddress}\n`;
+            message += `Correo: ${clientEmail}\n`;
+            message += `Teléfono: ${clientPhone}\n\n`;
+
+            message += `*DETALLE DEL PEDIDO:*\n`;
+            cart.forEach(item => {
+                message += `- ${item.name} x${item.quantity} - $${(item.price * item.quantity).toFixed(2)}\n`;
+            });
+
+            message += `\n*MÉTODO DE PAGO:* ${selectedPayment.toUpperCase()}\n`;
+            if (selectedPayment === 'tarjeta') {
+                message += `(Nota: El pago con tarjeta se realiza en el establecimiento)\n`;
+            }
+            message += `*MÉTODO DE ENTREGA:* ${selectedDelivery === 'envio' ? 'Envío a Domicilio' : 'Retiro en Establecimiento'}\n`;
+            if (selectedDelivery === 'retiro') {
+                message += `(Descuento del 5% aplicado por retiro en tienda)\n`;
+            }
+
+            message += `\n*RESUMEN DE PAGO:*\n`;
+            message += `Subtotal: $${subtotalPedido.toFixed(2)}\n`;
+            if (discountPedido > 0) {
+                message += `Descuento (5%): -$${discountPedido.toFixed(2)}\n`;
+            }
+            message += `IVA (0%): $0.00\n`;
+            message += `*TOTAL A PAGAR: $${totalPedido.toFixed(2)}*\n\n`;
+            message += `_Este pedido fue generado desde el sitio web de Zona Urbana Caps._`;
+
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`;
+
+            // Abrir WhatsApp
+            window.open(whatsappUrl, '_blank');
+
+            // Mostrar modal de agradecimiento con confeti
+            thankyouModal.classList.add('active');
+            
+            // Lanzar confeti
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+
+            // Limpiar el carrito y el formulario
+            cart = [];
+            document.getElementById('clientName').value = '';
+            document.getElementById('clientRuc').value = '';
+            document.getElementById('clientAddress').value = '';
+            document.getElementById('clientEmail').value = '';
+            document.getElementById('clientPhone').value = '';
+            paymentOptions.querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('active'));
+            paymentNote.style.display = 'none';
+            selectedPayment = null;
+            
+            updateCartUI();
+            cartSidebar.classList.remove('open');
+        });
+
+        // --- LÓGICA DEL SIMULADOR ---
+        function changeCapColor(element) {
+            const circles = document.querySelectorAll('#capColorOptions .color-circle');
+            circles.forEach(circle => circle.classList.remove('active'));
+            element.classList.add('active');
+            const color = element.getAttribute('data-color');
+            document.getElementById('capCrown').style.backgroundColor = color;
+            const brimColor = shadeColor(color, -20);
+            document.getElementById('capBrim').style.backgroundColor = brimColor;
+        }
+
+        function changeThreadColor(element) {
+            const circles = document.querySelectorAll('#threadColorOptions .color-circle');
+            circles.forEach(circle => circle.classList.remove('active'));
+            element.classList.add('active');
+            const color = element.getAttribute('data-color');
+            document.getElementById('embroideryPreview').style.color = color;
+        }
+
+        document.getElementById('inputText').addEventListener('input', function(e) {
+            const text = e.target.value;
+            document.getElementById('embroideryPreview').textContent = text || 'URBAN';
+        });
+
+        function shadeColor(color, percent) {
+            let R = parseInt(color.substring(1,3),16);
+            let G = parseInt(color.substring(3,5),16);
+            let B = parseInt(color.substring(5,7),16);
+            R = parseInt(R * (100 + percent) / 100);
+            G = parseInt(G * (100 + percent) / 100);
+            B = parseInt(B * (100 + percent) / 100);
+            R = (R<255)?R:255; G = (G<255)?G:255; B = (B<255)?B:255;  
+            let RR = ((R.toString(16).length==1)?"0"+R.toString(16):R.toString(16));
+            let GG = ((G.toString(16).length==1)?"0"+G.toString(16):G.toString(16));
+            let BB = ((B.toString(16).length==1)?"0"+B.toString(16):B.toString(16));
+            return "#"+RR+GG+BB;
+        }
+
+        // --- LÓGICA DE PRODUCTOS Y ADMINISTRACIÓN ---
+        const fileInput = document.getElementById('fileInput');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const productGrid = document.getElementById('productGrid');
+        const adminProductList = document.getElementById('adminProductList');
+
+        function initializeProducts() {
+            const savedProducts = localStorage.getItem('zonaUrbanaProducts');
+            if (!savedProducts) {
+                localStorage.setItem('zonaUrbanaProducts', JSON.stringify(defaultProducts));
+            }
+        }
+
+        function renderProducts(products) {
+            productGrid.innerHTML = '';
+            if (products.length === 0) {
+                productGrid.innerHTML = '<p style="color: var(--text-gray); grid-column: 1/-1; text-align: center;">No hay productos disponibles. Sube imágenes desde el panel de administración.</p>';
+                return;
+            }
+
+            products.forEach((prod, index) => {
+                const images = prod.images || [prod.image];
+                
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                
+                let carouselHTML = '';
+                if (images.length > 1) {
+                    carouselHTML = `
+                        <button class="carousel-btn prev" onclick="changeImage(this, -1)"><i class="fas fa-chevron-left"></i></button>
+                        <button class="carousel-btn next" onclick="changeImage(this, 1)"><i class="fas fa-chevron-right"></i></button>
+                    `;
+                }
+
+                card.innerHTML = `
+                    <div class="product-img-container">
+                        <span class="tag">NUEVO</span>
+                        ${images.map((img, i) => `<img src="${img}" class="${i === 0 ? 'active' : ''}" alt="Gorra ${index}">`).join('')}
+                        ${carouselHTML}
+                    </div>
+                    <div class="product-info">
+                        <div class="product-price">
+                            <div>$${prod.price || '29.99'}</div>
+                            <button class="btn-add" onclick="addToCart('${prod.name || 'Modelo Personalizado'}', ${prod.price || 29.99})"><i class="fas fa-shopping-cart"></i> Añadir</button>
+                        </div>
+                        <p style="color: var(--text-gray); font-size: 0.8rem; margin-top: 5px;">${prod.name || 'Modelo Personalizado'}</p>
+                    </div>
+                `;
+                productGrid.appendChild(card);
+            });
+        }
+
+        window.changeImage = function(btn, direction) {
+            const container = btn.closest('.product-img-container');
+            const images = container.querySelectorAll('img');
+            let activeIndex = -1;
+            
+            images.forEach((img, index) => {
+                if (img.classList.contains('active')) {
+                    activeIndex = index;
+                    img.classList.remove('active');
+                }
+            });
+
+            let newIndex = activeIndex + direction;
+            if (newIndex < 0) newIndex = images.length - 1;
+            if (newIndex >= images.length) newIndex = 0;
+
+            images[newIndex].classList.add('active');
+        };
+
+        function loadProducts() {
+            const savedProducts = JSON.parse(localStorage.getItem('zonaUrbanaProducts')) || [];
+            
+            renderProducts(savedProducts);
+
+            adminProductList.innerHTML = '<h4 style="color: var(--accent-yellow); margin-bottom: 10px;">Editar Productos</h4>';
+            if (savedProducts.length > 0) {
+                savedProducts.forEach((prod, index) => {
+                    const images = prod.images || [prod.image];
+                    const item = document.createElement('div');
+                    item.className = 'admin-product-item';
+                    item.innerHTML = `
+                        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                            <div class="admin-thumbs">
+                                ${images.map(img => `<img src="${img}" alt="thumb">`).join('')}
+                            </div>
+                            <input type="text" value="${prod.name || 'Modelo'}" onchange="updateProduct(${index}, 'name', this.value)" placeholder="Nombre">
+                            <input type="number" value="${prod.price || '29.99'}" onchange="updateProduct(${index}, 'price', this.value)" placeholder="Precio" step="0.01">
+                            <button class="btn-add-photo" onclick="addPhotoToProduct(${index})"><i class="fas fa-plus"></i> Añadir Foto</button>
+                        </div>
+                        <button onclick="deleteProduct(${index})"><i class="fas fa-trash"></i></button>
+                    `;
+                    adminProductList.appendChild(item);
+                });
+            } else {
+                adminProductList.innerHTML += '<p style="color: var(--text-gray); font-size: 0.9rem;">No hay productos subidos aún.</p>';
+            }
+        }
+
+        uploadBtn.addEventListener('click', () => {
+            const files = fileInput.files;
+            if (files.length === 0) {
+                alert('Por favor, selecciona al menos una imagen.');
+                return;
+            }
+
+            const imagePromises = Array.from(files).map(file => {
+                return new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => resolve(e.target.result);
+                    reader.readAsDataURL(file);
+                });
+            });
+
+            Promise.all(imagePromises).then(imagesData => {
+                let products = JSON.parse(localStorage.getItem('zonaUrbanaProducts')) || [];
+                
+                for (let i = 0; i < imagesData.length; i += 2) {
+                    const productImages = [imagesData[i]];
+                    if (imagesData[i + 1]) {
+                        productImages.push(imagesData[i + 1]);
+                    }
+                    
+                    products.push({ 
+                        images: productImages,
+                        name: 'Nuevo Modelo',
+                        price: '29.99'
+                    });
+                }
+                
+                localStorage.setItem('zonaUrbanaProducts', JSON.stringify(products));
+                loadProducts();
+                alert('¡Imágenes subidas con éxito! Se han creado productos nuevos.');
+            });
+
+            fileInput.value = '';
+        });
+
+        window.addPhotoToProduct = function(index) {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    let products = JSON.parse(localStorage.getItem('zonaUrbanaProducts')) || [];
+                    if (products[index]) {
+                        if (!products[index].images) {
+                            products[index].images = [products[index].image];
+                        }
+                        products[index].images.push(event.target.result);
+                        localStorage.setItem('zonaUrbanaProducts', JSON.stringify(products));
+                        loadProducts();
+                        alert('¡Foto añadida al producto!');
+                    }
+                };
+                reader.readAsDataURL(file);
+            };
+            input.click();
+        };
+
+        window.updateProduct = function(index, field, value) {
+            let products = JSON.parse(localStorage.getItem('zonaUrbanaProducts')) || [];
+            if (products[index]) {
+                products[index][field] = value;
+                localStorage.setItem('zonaUrbanaProducts', JSON.stringify(products));
+                loadProducts();
+            }
+        };
+
+        window.deleteProduct = function(index) {
+            if (confirm('¿Estás seguro de que quieres eliminar este producto?')) {
+                let products = JSON.parse(localStorage.getItem('zonaUrbanaProducts')) || [];
+                products.splice(index, 1);
+                localStorage.setItem('zonaUrbanaProducts', JSON.stringify(products));
+                loadProducts();
+            }
+        };
+
+        initializeProducts();
+        loadProducts();
+        updateCartUI();
+    </script>
+</body>
+</html>
