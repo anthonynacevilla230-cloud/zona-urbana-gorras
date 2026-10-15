@@ -431,7 +431,7 @@
     <script>
         const WHATSAPP_NUMBER = "593964103218";
         const ADMIN_PASSWORD = "3726";
-        const CLOUDINARY_CLOUD_NAME = "d74vmiop";
+        const CLOUDINARY_CLOUD_NAME = "d7dvmiop";
         const CLOUDINARY_UPLOAD_PRESET = "zonaurbana_sin_firma";
 
         let cart = [];
@@ -446,7 +446,6 @@
             { name: "Trucker Clásica Blanca", price: "24.99", category: "trucker", images: ["https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=400&h=400&fit=crop", "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=400&h=400&fit=crop"] }
         ];
 
-        // LOGIN
         const loginModal = document.getElementById('loginModal');
         const toggleAdminBtn = document.getElementById('toggleAdmin');
         const loginBtn = document.getElementById('loginBtn');
@@ -485,7 +484,6 @@
         });
         window.addEventListener('click', (e) => { if (e.target === loginModal) loginModal.classList.remove('active'); });
 
-        // SISTEMA DE SUBIDA POR SLOTS
         window.handleFileSelect = function(slotNum) {
             const input = document.getElementById('fileInput' + slotNum);
             const slot = document.getElementById('slot' + slotNum);
@@ -560,7 +558,6 @@
             btn.disabled = false;
         });
 
-        // CARRITO
         const toggleCartBtn = document.getElementById('toggleCart');
         const closeCartBtn = document.getElementById('closeCartBtn');
         const cartSidebar = document.getElementById('cartSidebar');
@@ -687,7 +684,6 @@
             cartSidebar.classList.remove('open');
         });
 
-        // SIMULADOR
         function changeCapColor(element) {
             document.querySelectorAll('#capColorOptions .color-circle').forEach(c => c.classList.remove('active'));
             element.classList.add('active');
@@ -703,7 +699,6 @@
             document.getElementById('embroideryPreview').textContent = e.target.value || 'URBAN';
         });
 
-        // PRODUCTOS
         const productGrid = document.getElementById('productGrid');
         const adminProductList = document.getElementById('adminProductList');
 
