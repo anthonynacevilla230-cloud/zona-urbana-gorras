@@ -110,6 +110,7 @@
         .btn-add { background-color: #333; border: none; color: white; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: 600; }
         .btn-add:hover { background-color: var(--accent-yellow); color: #000; }
 
+        /* ADMIN PANEL */
         .admin-panel { display: none; background-color: #1a1a1a; border: 1px solid var(--accent-yellow); border-radius: 10px; padding: 20px; margin: 20px auto; max-width: 800px; position: relative; }
         .admin-panel.active { display: block; }
         .admin-panel h3 { color: var(--accent-yellow); margin-bottom: 15px; }
@@ -117,12 +118,23 @@
         .btn-logout { position: absolute; top: 20px; right: 20px; background-color: transparent; border: 1px solid #e74c3c; color: #e74c3c; padding: 5px 15px; border-radius: 20px; cursor: pointer; font-size: 0.8rem; font-weight: 700; display: flex; align-items: center; gap: 5px; }
         .btn-logout:hover { background-color: #e74c3c; color: white; }
 
-        .upload-area { border: 2px dashed var(--border-color); padding: 30px; text-align: center; border-radius: 10px; cursor: pointer; margin-bottom: 15px; }
-        .upload-area:hover { border-color: var(--accent-yellow); }
-        .upload-area input[type="file"] { display: none; }
-        .upload-area i { font-size: 2rem; color: var(--accent-yellow); margin-bottom: 10px; }
-        .upload-area p { color: var(--text-gray); font-size: 0.9rem; }
-        .btn-upload { background-color: var(--accent-yellow); color: #000; border: none; padding: 10px 20px; border-radius: 5px; font-weight: 700; cursor: pointer; width: 100%; margin-top: 10px; }
+        /* NUEVO SISTEMA DE SUBIDA (más robusto) */
+        .upload-slots { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        .upload-slot { border: 2px dashed var(--border-color); padding: 20px; text-align: center; border-radius: 10px; cursor: pointer; transition: all 0.3s; min-height: 180px; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; overflow: hidden; }
+        .upload-slot:hover { border-color: var(--accent-yellow); }
+        .upload-slot.filled { border-style: solid; border-color: var(--success-green); }
+        .upload-slot input[type="file"] { display: none; }
+        .upload-slot i { font-size: 2rem; color: var(--accent-yellow); margin-bottom: 10px; }
+        .upload-slot p { color: var(--text-gray); font-size: 0.85rem; }
+        .upload-slot .preview-img { width: 100%; height: 150px; object-fit: contain; margin-bottom: 10px; }
+        .upload-slot .status-text { font-size: 0.75rem; margin-top: 5px; font-weight: 700; }
+        .upload-slot .status-ok { color: var(--success-green); }
+        .upload-slot .status-loading { color: var(--accent-yellow); }
+
+        .upload-actions { display: flex; gap: 10px; margin-bottom: 20px; }
+        .btn-upload { background-color: var(--accent-yellow); color: #000; border: none; padding: 12px 20px; border-radius: 5px; font-weight: 700; cursor: pointer; flex: 1; font-size: 1rem; }
+        .btn-upload:disabled { background-color: #555; cursor: not-allowed; color: #999; }
+        .btn-clear { background-color: transparent; color: #e74c3c; border: 1px solid #e74c3c; padding: 12px 20px; border-radius: 5px; font-weight: 700; cursor: pointer; }
 
         .admin-product-list { margin-top: 20px; border-top: 1px solid var(--border-color); padding-top: 15px; }
         .admin-product-item { display: flex; justify-content: space-between; align-items: center; background: #222; padding: 10px; margin-bottom: 10px; border-radius: 5px; flex-wrap: wrap; gap: 10px; }
@@ -208,7 +220,7 @@
         .social-icons a { color: var(--text-gray); font-size: 1.2rem; }
         .social-icons a:hover { color: var(--accent-yellow); }
 
-        @media (max-width: 992px) { .simulator-content { grid-template-columns: 1fr; } .custom-grid { grid-template-columns: 1fr; } .footer-grid { grid-template-columns: 1fr 1fr; } .cart-sidebar { width: 100%; right: -100%; } }
+        @media (max-width: 992px) { .simulator-content { grid-template-columns: 1fr; } .custom-grid { grid-template-columns: 1fr; } .footer-grid { grid-template-columns: 1fr 1fr; } .cart-sidebar { width: 100%; right: -100%; } .upload-slots { grid-template-columns: 1fr; } }
         @media (max-width: 768px) { .nav-links { display: none; } .hero h1 { font-size: 2rem; } .features-bar { flex-direction: column; gap: 15px; align-items: flex-start; } .catalog-header { flex-direction: column; align-items: flex-start; gap: 15px; } .care-grid { grid-template-columns: 1fr; } .footer-grid { grid-template-columns: 1fr; gap: 40px; } .brand-name { font-size: 1.5rem; } .brand-logo-icon { width: 45px; height: 45px; font-size: 1.5rem; } .btn-logout { top: 10px; right: 10px; padding: 3px 10px; font-size: 0.7rem; } .billing-grid { grid-template-columns: 1fr; } .billing-full { grid-column: span 1; } .options-row { flex-direction: column; } }
     </style>
 </head>
@@ -353,12 +365,23 @@
                 <button class="btn-logout" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button>
             </div>
             
-            <div class="upload-area" onclick="document.getElementById('fileInput').click()">
-                <i class="fas fa-images"></i>
-                <p>Haz clic aquí para seleccionar <strong>2 fotos</strong> por producto (JPG, PNG)</p>
-                <input type="file" id="fileInput" multiple>
+            <!-- NUEVO SISTEMA DE SUBIDA POR SLOTS -->
+            <div class="upload-slots">
+                <div class="upload-slot" id="slot1" onclick="document.getElementById('fileInput1').click()">
+                    <i class="fas fa-camera"></i>
+                    <p>Foto 1</p>
+                    <input type="file" id="fileInput1" onchange="handleFileSelect(1)">
+                </div>
+                <div class="upload-slot" id="slot2" onclick="document.getElementById('fileInput2').click()">
+                    <i class="fas fa-camera"></i>
+                    <p>Foto 2 (opcional)</p>
+                    <input type="file" id="fileInput2" onchange="handleFileSelect(2)">
+                </div>
             </div>
-            <button class="btn-upload" id="uploadBtn"><i class="fas fa-upload"></i> Subir Imágenes a la Nube</button>
+            <div class="upload-actions">
+                <button class="btn-upload" id="uploadBtn" disabled><i class="fas fa-cloud-upload-alt"></i> Subir Producto</button>
+                <button class="btn-clear" id="clearBtn"><i class="fas fa-times"></i> Limpiar</button>
+            </div>
 
             <div class="admin-product-list" id="adminProductList">
                 <h4 style="color: var(--accent-yellow); margin-bottom: 10px;">Editar Productos</h4>
@@ -548,38 +571,15 @@
         let isLoggedIn = false;
         let selectedPayment = null;
         let selectedDelivery = 'envio';
+        let selectedFiles = { 1: null, 2: null };
 
         // ========================================
         // PRODUCTOS DE EJEMPLO
         // ========================================
         const defaultProducts = [
-            {
-                name: "Cyber Black Snapback",
-                price: "34.99",
-                category: "snapback",
-                images: [
-                    "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=400&h=400&fit=crop",
-                    "https://images.unsplash.com/photo-1575428652377-a2d80e2277fc?w=400&h=400&fit=crop"
-                ]
-            },
-            {
-                name: "Streetwear Beige Dad Hat",
-                price: "28.50",
-                category: "curved",
-                images: [
-                    "https://images.unsplash.com/photo-1534215754734-18e55d13e346?w=400&h=400&fit=crop",
-                    "https://images.unsplash.com/photo-1521369909029-2afed882baee?w=400&h=400&fit=crop"
-                ]
-            },
-            {
-                name: "Trucker Clásica Blanca",
-                price: "24.99",
-                category: "trucker",
-                images: [
-                    "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=400&h=400&fit=crop",
-                    "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=400&h=400&fit=crop"
-                ]
-            }
+            { name: "Cyber Black Snapback", price: "34.99", category: "snapback", images: ["https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=400&h=400&fit=crop", "https://images.unsplash.com/photo-1575428652377-a2d80e2277fc?w=400&h=400&fit=crop"] },
+            { name: "Streetwear Beige Dad Hat", price: "28.50", category: "curved", images: ["https://images.unsplash.com/photo-1534215754734-18e55d13e346?w=400&h=400&fit=crop", "https://images.unsplash.com/photo-1521369909029-2afed882baee?w=400&h=400&fit=crop"] },
+            { name: "Trucker Clásica Blanca", price: "24.99", category: "trucker", images: ["https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=400&h=400&fit=crop", "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=400&h=400&fit=crop"] }
         ];
 
         // ========================================
@@ -611,21 +611,105 @@
                 loginModal.classList.remove('active');
                 adminPanel.classList.add('active');
                 toggleAdminBtn.textContent = 'Cerrar Admin';
-            } else {
-                loginError.style.display = 'block';
-            }
+            } else { loginError.style.display = 'block'; }
         });
 
         closeLoginBtn.addEventListener('click', () => { loginModal.classList.remove('active'); });
-
         logoutBtn.addEventListener('click', () => {
             isLoggedIn = false;
             adminPanel.classList.remove('active');
             toggleAdminBtn.textContent = 'Admin';
             alert('Has cerrado sesión correctamente.');
         });
-
         window.addEventListener('click', (e) => { if (e.target === loginModal) loginModal.classList.remove('active'); });
+
+        // ========================================
+        // SISTEMA DE SUBIDA POR SLOTS
+        // ========================================
+        window.handleFileSelect = function(slotNum) {
+            const input = document.getElementById('fileInput' + slotNum);
+            const slot = document.getElementById('slot' + slotNum);
+            const file = input.files[0];
+
+            if (!file) return;
+
+            selectedFiles[slotNum] = file;
+
+            // Mostrar preview
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                slot.innerHTML = `
+                    <img src="${e.target.result}" class="preview-img" alt="Preview ${slotNum}">
+                    <div class="status-text status-ok"><i class="fas fa-check-circle"></i> Foto lista: ${file.name.substring(0, 20)}...</div>
+                    <input type="file" id="fileInput${slotNum}" onchange="handleFileSelect(${slotNum})">
+                `;
+                slot.classList.add('filled');
+                checkUploadReady();
+            };
+            reader.readAsDataURL(file);
+        };
+
+        function checkUploadReady() {
+            const btn = document.getElementById('uploadBtn');
+            if (selectedFiles[1]) { btn.disabled = false; btn.style.background = 'var(--accent-yellow)'; }
+            else { btn.disabled = true; btn.style.background = '#555'; }
+        }
+
+        document.getElementById('clearBtn').addEventListener('click', () => {
+            selectedFiles = { 1: null, 2: null };
+            document.getElementById('slot1').classList.remove('filled');
+            document.getElementById('slot2').classList.remove('filled');
+            document.getElementById('slot1').innerHTML = `<i class="fas fa-camera"></i><p>Foto 1</p><input type="file" id="fileInput1" onchange="handleFileSelect(1)">`;
+            document.getElementById('slot2').innerHTML = `<i class="fas fa-camera"></i><p>Foto 2 (opcional)</p><input type="file" id="fileInput2" onchange="handleFileSelect(2)">`;
+            checkUploadReady();
+        });
+
+        document.getElementById('uploadBtn').addEventListener('click', async () => {
+            const btn = document.getElementById('uploadBtn');
+            if (!selectedFiles[1]) { alert('Debes seleccionar al menos la Foto 1.'); return; }
+
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Subiendo a Cloudinary...';
+            btn.disabled = true;
+
+            const uploadedUrls = [];
+
+            // Subir Foto 1
+            for (const slotNum of [1, 2]) {
+                const file = selectedFiles[slotNum];
+                if (!file) continue;
+
+                const formData = new FormData();
+                formData.append('file', file);
+                formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+
+                try {
+                    const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`, {
+                        method: 'POST',
+                        body: formData
+                    });
+                    const data = await response.json();
+                    if (data.secure_url) {
+                        uploadedUrls.push(data.secure_url);
+                    } else {
+                        alert('Error al subir Foto ' + slotNum + ': ' + (data.error?.message || 'Error desconocido'));
+                    }
+                } catch (error) {
+                    alert('Error de conexión al subir Foto ' + slotNum + ': ' + error.message);
+                }
+            }
+
+            if (uploadedUrls.length > 0) {
+                let products = JSON.parse(localStorage.getItem('zonaUrbanaProducts')) || [];
+                products.push({ images: uploadedUrls, name: 'Nuevo Modelo', price: '29.99', category: 'snapback' });
+                localStorage.setItem('zonaUrbanaProducts', JSON.stringify(products));
+                loadProducts();
+                document.getElementById('clearBtn').click();
+                alert('¡Producto subido con éxito! Ahora puedes editar el nombre, precio y categoría en la lista de abajo.');
+            }
+
+            btn.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Subir Producto';
+            btn.disabled = false;
+        });
 
         // ========================================
         // LÓGICA DEL CARRITO
@@ -651,23 +735,14 @@
         function updateTotals() {
             let subtotal = 0;
             cart.forEach(item => { subtotal += item.price * item.quantity; });
-
             let discount = 0;
             if (selectedDelivery === 'retiro') { discount = subtotal * 0.05; }
-
-            const iva = subtotal * 0.00;
-            const total = subtotal - discount + iva;
-
+            const iva = 0;
+            const total = subtotal - discount;
             subtotalSpan.textContent = `$${subtotal.toFixed(2)}`;
             ivaSpan.textContent = `$${iva.toFixed(2)}`;
-
-            if (discount > 0) {
-                discountRow.style.display = 'flex';
-                discountAmountSpan.textContent = `-$${discount.toFixed(2)}`;
-            } else {
-                discountRow.style.display = 'none';
-            }
-
+            if (discount > 0) { discountRow.style.display = 'flex'; discountAmountSpan.textContent = `-$${discount.toFixed(2)}`; }
+            else { discountRow.style.display = 'none'; }
             totalSpan.textContent = `$${total.toFixed(2)}`;
             cartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
         }
@@ -680,13 +755,7 @@
                 cart.forEach((item, index) => {
                     const div = document.createElement('div');
                     div.className = 'cart-item';
-                    div.innerHTML = `
-                        <div class="cart-item-info">
-                            <span class="cart-item-title">${item.name}</span>
-                            <span class="cart-item-price">$${item.price.toFixed(2)} x ${item.quantity}</span>
-                        </div>
-                        <button class="btn-remove-item" onclick="removeFromCart(${index})"><i class="fas fa-trash"></i></button>
-                    `;
+                    div.innerHTML = `<div class="cart-item-info"><span class="cart-item-title">${item.name}</span><span class="cart-item-price">$${item.price.toFixed(2)} x ${item.quantity}</span></div><button class="btn-remove-item" onclick="removeFromCart(${index})"><i class="fas fa-trash"></i></button>`;
                     cartItemsContainer.appendChild(div);
                 });
             }
@@ -725,8 +794,7 @@
         });
 
         const thankyouModal = document.getElementById('thankyouModal');
-        const closeThankyouBtn = document.getElementById('closeThankyouBtn');
-        closeThankyouBtn.addEventListener('click', () => thankyouModal.classList.remove('active'));
+        document.getElementById('closeThankyouBtn').addEventListener('click', () => thankyouModal.classList.remove('active'));
 
         document.getElementById('checkoutBtn').addEventListener('click', () => {
             const clientName = document.getElementById('clientName').value;
@@ -745,20 +813,17 @@
             if (selectedDelivery === 'retiro') { discountPedido = subtotalPedido * 0.05; }
             const totalPedido = subtotalPedido - discountPedido;
 
-            let message = `*¡NUEVO PEDIDO - ZONA URBANA CAPS!*\n\n`;
-            message += `*DATOS DEL COMPRADOR:*\nNombre: ${clientName}\nRUC/Cédula: ${clientRuc}\nDirección: ${clientAddress}\nCorreo: ${clientEmail}\nTeléfono: ${clientPhone}\n\n`;
-            message += `*DETALLE DEL PEDIDO:*\n`;
+            let message = `*¡NUEVO PEDIDO - ZONA URBANA CAPS!*\n\n*DATOS DEL COMPRADOR:*\nNombre: ${clientName}\nRUC/Cédula: ${clientRuc}\nDirección: ${clientAddress}\nCorreo: ${clientEmail}\nTeléfono: ${clientPhone}\n\n*DETALLE DEL PEDIDO:*\n`;
             cart.forEach(item => { message += `- ${item.name} x${item.quantity} - $${(item.price * item.quantity).toFixed(2)}\n`; });
             message += `\n*MÉTODO DE PAGO:* ${selectedPayment.toUpperCase()}\n`;
             if (selectedPayment === 'tarjeta') { message += `(Nota: El pago con tarjeta se realiza en el establecimiento)\n`; }
             message += `*MÉTODO DE ENTREGA:* ${selectedDelivery === 'envio' ? 'Envío a Domicilio' : 'Retiro en Establecimiento'}\n`;
-            if (selectedDelivery === 'retiro') { message += `(Descuento del 5% aplicado por retiro en tienda)\n`; }
+            if (selectedDelivery === 'retiro') { message += `(Descuento del 5% aplicado)\n`; }
             message += `\n*RESUMEN DE PAGO:*\nSubtotal: $${subtotalPedido.toFixed(2)}\n`;
             if (discountPedido > 0) { message += `Descuento (5%): -$${discountPedido.toFixed(2)}\n`; }
             message += `IVA (0%): $0.00\n*TOTAL A PAGAR: $${totalPedido.toFixed(2)}*\n\n_Este pedido fue generado desde el sitio web de Zona Urbana Caps._`;
 
-            const encodedMessage = encodeURIComponent(message);
-            window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`, '_blank');
+            window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, '_blank');
             thankyouModal.classList.add('active');
             confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
 
@@ -804,24 +869,20 @@
         }
 
         // ========================================
-        // LÓGICA DE PRODUCTOS Y ADMINISTRACIÓN
+        // LÓGICA DE PRODUCTOS
         // ========================================
-        const fileInput = document.getElementById('fileInput');
-        const uploadBtn = document.getElementById('uploadBtn');
         const productGrid = document.getElementById('productGrid');
         const adminProductList = document.getElementById('adminProductList');
 
         function initializeProducts() {
             const savedProducts = localStorage.getItem('zonaUrbanaProducts');
-            if (!savedProducts) {
-                localStorage.setItem('zonaUrbanaProducts', JSON.stringify(defaultProducts));
-            }
+            if (!savedProducts) { localStorage.setItem('zonaUrbanaProducts', JSON.stringify(defaultProducts)); }
         }
 
         function renderProducts(products) {
             productGrid.innerHTML = '';
             if (products.length === 0) {
-                productGrid.innerHTML = '<p style="color: var(--text-gray); grid-column: 1/-1; text-align: center;">No hay productos disponibles. Sube imágenes desde el panel de administración.</p>';
+                productGrid.innerHTML = '<p style="color: var(--text-gray); grid-column: 1/-1; text-align: center;">No hay productos disponibles.</p>';
                 return;
             }
             products.forEach((prod, index) => {
@@ -830,25 +891,9 @@
                 card.className = 'product-card';
                 let carouselHTML = '';
                 if (images.length > 1) {
-                    carouselHTML = `
-                        <button class="carousel-btn prev" onclick="changeImage(this, -1)"><i class="fas fa-chevron-left"></i></button>
-                        <button class="carousel-btn next" onclick="changeImage(this, 1)"><i class="fas fa-chevron-right"></i></button>
-                    `;
+                    carouselHTML = `<button class="carousel-btn prev" onclick="changeImage(this, -1)"><i class="fas fa-chevron-left"></i></button><button class="carousel-btn next" onclick="changeImage(this, 1)"><i class="fas fa-chevron-right"></i></button>`;
                 }
-                card.innerHTML = `
-                    <div class="product-img-container">
-                        <span class="tag">NUEVO</span>
-                        ${images.map((img, i) => `<img src="${img}" class="${i === 0 ? 'active' : ''}" alt="Gorra ${index}">`).join('')}
-                        ${carouselHTML}
-                    </div>
-                    <div class="product-info">
-                        <div class="product-price">
-                            <div>$${prod.price || '29.99'}</div>
-                            <button class="btn-add" onclick="addToCart('${prod.name || 'Modelo Personalizado'}', ${prod.price || 29.99})"><i class="fas fa-shopping-cart"></i> Añadir</button>
-                        </div>
-                        <p style="color: var(--text-gray); font-size: 0.8rem; margin-top: 5px;">${prod.name || 'Modelo Personalizado'}</p>
-                    </div>
-                `;
+                card.innerHTML = `<div class="product-img-container"><span class="tag">NUEVO</span>${images.map((img, i) => `<img src="${img}" class="${i === 0 ? 'active' : ''}" alt="Gorra ${index}">`).join('')}${carouselHTML}</div><div class="product-info"><div class="product-price"><div>$${prod.price || '29.99'}</div><button class="btn-add" onclick="addToCart('${prod.name || 'Modelo'}', ${prod.price || 29.99})"><i class="fas fa-shopping-cart"></i> Añadir</button></div><p style="color: var(--text-gray); font-size: 0.8rem; margin-top: 5px;">${prod.name || 'Modelo'}</p></div>`;
                 productGrid.appendChild(card);
             });
         }
@@ -873,77 +918,13 @@
                     const images = prod.images || [prod.image];
                     const item = document.createElement('div');
                     item.className = 'admin-product-item';
-                    item.innerHTML = `
-                        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                            <div class="admin-thumbs">${images.map(img => `<img src="${img}" alt="thumb">`).join('')}</div>
-                            <input type="text" value="${prod.name || 'Modelo'}" onchange="updateProduct(${index}, 'name', this.value)" placeholder="Nombre">
-                            <input type="number" value="${prod.price || '29.99'}" onchange="updateProduct(${index}, 'price', this.value)" placeholder="Precio" step="0.01">
-                            <select onchange="updateProduct(${index}, 'category', this.value)">
-                                <option value="snapback" ${prod.category === 'snapback' ? 'selected' : ''}>Snapback</option>
-                                <option value="trucker" ${prod.category === 'trucker' ? 'selected' : ''}>Trucker</option>
-                                <option value="curved" ${prod.category === 'curved' ? 'selected' : ''}>Curved/Dad</option>
-                                <option value="beanies" ${prod.category === 'beanies' ? 'selected' : ''}>Gorros/Beanies</option>
-                                <option value="custom" ${prod.category === 'custom' ? 'selected' : ''}>Custom 3D</option>
-                            </select>
-                            <button class="btn-add-photo" onclick="addPhotoToProduct(${index})"><i class="fas fa-plus"></i> Añadir Foto</button>
-                        </div>
-                        <button onclick="deleteProduct(${index})"><i class="fas fa-trash"></i></button>
-                    `;
+                    item.innerHTML = `<div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;"><div class="admin-thumbs">${images.map(img => `<img src="${img}" alt="thumb">`).join('')}</div><input type="text" value="${prod.name || 'Modelo'}" onchange="updateProduct(${index}, 'name', this.value)" placeholder="Nombre"><input type="number" value="${prod.price || '29.99'}" onchange="updateProduct(${index}, 'price', this.value)" placeholder="Precio" step="0.01"><select onchange="updateProduct(${index}, 'category', this.value)"><option value="snapback" ${prod.category === 'snapback' ? 'selected' : ''}>Snapback</option><option value="trucker" ${prod.category === 'trucker' ? 'selected' : ''}>Trucker</option><option value="curved" ${prod.category === 'curved' ? 'selected' : ''}>Curved/Dad</option><option value="beanies" ${prod.category === 'beanies' ? 'selected' : ''}>Gorros/Beanies</option><option value="custom" ${prod.category === 'custom' ? 'selected' : ''}>Custom 3D</option></select><button class="btn-add-photo" onclick="addPhotoToProduct(${index})"><i class="fas fa-plus"></i> Añadir Foto</button></div><button onclick="deleteProduct(${index})"><i class="fas fa-trash"></i></button>`;
                     adminProductList.appendChild(item);
                 });
             } else {
-                adminProductList.innerHTML += '<p style="color: var(--text-gray); font-size: 0.9rem;">No hay productos subidos aún.</p>';
+                adminProductList.innerHTML += '<p style="color: var(--text-gray); font-size: 0.9rem;">No hay productos.</p>';
             }
         }
-
-        uploadBtn.addEventListener('click', async () => {
-            const files = fileInput.files;
-            if (files.length === 0) { alert('Por favor, selecciona al menos una imagen.'); return; }
-
-            uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Subiendo...';
-            uploadBtn.disabled = true;
-
-            const uploadedUrls = [];
-
-            for (const file of files) {
-                const formData = new FormData();
-                formData.append('file', file);
-                formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
-
-                try {
-                    const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`, {
-                        method: 'POST',
-                        body: formData
-                    });
-                    const data = await response.json();
-                    if (data.secure_url) {
-                        uploadedUrls.push(data.secure_url);
-                    } else {
-                        console.error('Respuesta de Cloudinary:', data);
-                        alert('Error al subir: ' + (data.error?.message || 'Error desconocido'));
-                    }
-                } catch (error) {
-                    console.error('Error al subir a Cloudinary:', error);
-                    alert('Hubo un error al subir una imagen: ' + error.message);
-                }
-            }
-
-            if (uploadedUrls.length > 0) {
-                let products = JSON.parse(localStorage.getItem('zonaUrbanaProducts')) || [];
-                for (let i = 0; i < uploadedUrls.length; i += 2) {
-                    const productImages = [uploadedUrls[i]];
-                    if (uploadedUrls[i + 1]) productImages.push(uploadedUrls[i + 1]);
-                    products.push({ images: productImages, name: 'Nuevo Modelo', price: '29.99', category: 'snapback' });
-                }
-                localStorage.setItem('zonaUrbanaProducts', JSON.stringify(products));
-                loadProducts();
-                alert('¡Imágenes subidas con éxito a Cloudinary! Ahora puedes editar el nombre, precio y categoría.');
-            }
-
-            uploadBtn.innerHTML = '<i class="fas fa-upload"></i> Subir Imágenes a la Nube';
-            uploadBtn.disabled = false;
-            fileInput.value = '';
-        });
 
         window.addPhotoToProduct = function(index) {
             const input = document.createElement('input');
@@ -951,16 +932,11 @@
             input.onchange = async function(e) {
                 const file = e.target.files[0];
                 if (!file) return;
-
                 const formData = new FormData();
                 formData.append('file', file);
                 formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
-
                 try {
-                    const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`, {
-                        method: 'POST',
-                        body: formData
-                    });
+                    const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`, { method: 'POST', body: formData });
                     const data = await response.json();
                     if (data.secure_url) {
                         let products = JSON.parse(localStorage.getItem('zonaUrbanaProducts')) || [];
@@ -969,28 +945,21 @@
                             products[index].images.push(data.secure_url);
                             localStorage.setItem('zonaUrbanaProducts', JSON.stringify(products));
                             loadProducts();
-                            alert('¡Foto añadida al producto!');
+                            alert('¡Foto añadida!');
                         }
                     }
-                } catch (error) {
-                    console.error('Error al subir a Cloudinary:', error);
-                    alert('Hubo un error al subir la imagen.');
-                }
+                } catch (error) { alert('Error al subir la imagen.'); }
             };
             input.click();
         };
 
         window.updateProduct = function(index, field, value) {
             let products = JSON.parse(localStorage.getItem('zonaUrbanaProducts')) || [];
-            if (products[index]) {
-                products[index][field] = value;
-                localStorage.setItem('zonaUrbanaProducts', JSON.stringify(products));
-                loadProducts();
-            }
+            if (products[index]) { products[index][field] = value; localStorage.setItem('zonaUrbanaProducts', JSON.stringify(products)); loadProducts(); }
         };
 
         window.deleteProduct = function(index) {
-            if (confirm('¿Estás seguro de que quieres eliminar este producto?')) {
+            if (confirm('¿Eliminar este producto?')) {
                 let products = JSON.parse(localStorage.getItem('zonaUrbanaProducts')) || [];
                 products.splice(index, 1);
                 localStorage.setItem('zonaUrbanaProducts', JSON.stringify(products));
