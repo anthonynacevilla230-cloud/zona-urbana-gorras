@@ -108,7 +108,7 @@
         .special-product-item { background: #111; border-radius: 8px; overflow: hidden; border: 1px solid #333; transition: transform 0.3s, border-color 0.3s; animation: fadeIn 0.5s; }
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
         .special-product-item:hover { transform: translateY(-3px); border-color: var(--accent-yellow); }
-        .special-product-img { width: 100%; height: 90px; object-fit: cover; background: #fff; }
+        .special-product-img { width: 100%; height: 90px; object-fit: contain; background: #fff; }
         .special-product-info { padding: 8px; }
         .special-product-name { font-size: 0.7rem; color: var(--text-white); font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .special-product-price { font-size: 0.8rem; color: var(--accent-yellow); font-weight: 900; margin-top: 3px; }
@@ -124,7 +124,10 @@
         .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
         .product-card { background-color: var(--bg-card); border-radius: 10px; overflow: hidden; border: 1px solid var(--border-color); position: relative; }
         .product-img-container { width: 100%; height: 250px; position: relative; overflow: hidden; background: #fff; }
-        .product-img-container img { width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 0.3s; }
+        
+        /* CORRECCIÓN AQUÍ: object-fit: contain en lugar de cover */
+        .product-img-container img { width: 100%; height: 100%; object-fit: contain; position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 0.3s; padding: 10px; }
+        
         .product-img-container img.active { opacity: 1; }
         .carousel-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; z-index: 5; display: flex; justify-content: center; align-items: center; }
         .carousel-btn.prev { left: 5px; }
@@ -173,7 +176,7 @@
         .admin-product-item select { background: #111; border: 1px solid var(--accent-yellow); color: white; padding: 8px; border-radius: 5px; font-size: 0.9rem; }
 
         .admin-thumbs { display: flex; gap: 5px; align-items: center; }
-        .admin-thumbs img { width: 40px; height: 40px; object-fit: cover; border-radius: 3px; border: 1px solid #444; }
+        .admin-thumbs img { width: 40px; height: 40px; object-fit: contain; background: #fff; border-radius: 3px; border: 1px solid #444; }
         .btn-add-photo { background: #333; color: white; border: none; padding: 8px 10px; border-radius: 5px; cursor: pointer; font-size: 0.75rem; font-weight: 700; }
         .btn-delete-prod { background: #e74c3c; border: none; color: white; padding: 8px 10px; border-radius: 5px; cursor: pointer; }
 
@@ -253,7 +256,8 @@
     </style>
 </head>
 <body>
-        <div class="brand-bar">
+
+    <div class="brand-bar">
         <div class="brand-container">
             <div class="brand-logo-icon"><i class="fas fa-hat-cowboy"></i></div>
             <div class="brand-text">
@@ -297,7 +301,6 @@
         </div>
     </header>
 
-    <!-- CARRITO -->
     <div class="cart-sidebar" id="cartSidebar">
         <div class="cart-header">
             <h3><i class="fas fa-shopping-cart"></i> Facturación</h3>
@@ -571,7 +574,6 @@
             appId: "1:168544353675:web:640aecdf3f69f875f3038e"
         };
 
-        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
@@ -587,9 +589,8 @@
         let selectedFiles = { 1: null, 2: null };
         let currentFilter = 'all';
         let specialBoxInterval = null;
-        let allProducts = []; // Array global para productos de Firebase
+        let allProducts = [];
 
-        // CATEGORÍAS
         const categorias = [
             { value: "snapback", label: "Snapback" },
             { value: "trucker", label: "Trucker" },
@@ -744,7 +745,6 @@
             }
 
             if (uploadedUrls.length > 0) {
-                // Guardar en Firebase (Firestore)
                 try {
                     await db.collection('productos').add({
                         name: newName,
@@ -755,7 +755,7 @@
                     });
                     alert('¡Producto subido con éxito! Ahora todos los clientes pueden verlo.');
                     document.getElementById('clearBtn').click();
-                    loadProducts(); // Recargar productos
+                    loadProducts();
                 } catch (error) {
                     alert('Error al guardar en Firebase: ' + error.message);
                 }
@@ -944,21 +944,18 @@
 
         async function loadProducts() {
             try {
-                // Obtener productos desde Firestore
                 const snapshot = await db.collection('productos').orderBy('timestamp', 'desc').get();
                 allProducts = [];
                 snapshot.forEach(doc => {
                     allProducts.push({ id: doc.id, ...doc.data() });
                 });
 
-                // Filtrar para el catálogo
                 let filtered = allProducts;
                 if (currentFilter !== 'all') {
                     filtered = allProducts.filter(prod => prod.category === currentFilter);
                 }
                 renderProducts(filtered);
 
-                // Actualizar lista de admin (todos los productos)
                 adminProductList.innerHTML = '<h4 style="color: var(--accent-yellow); margin-bottom: 15px; font-size: 1.1rem;"><i class="fas fa-edit"></i> Editar Productos Existentes</h4>';
                 if (allProducts.length > 0) {
                     allProducts.forEach((prod) => {
@@ -1000,7 +997,6 @@
                     const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`, { method: 'POST', body: formData });
                     const data = await response.json();
                     if (data.secure_url) {
-                        // Actualizar el producto en Firestore
                         const productRef = db.collection('productos').doc(id);
                         await productRef.update({
                             images: firebase.firestore.FieldValue.arrayUnion(data.secure_url)
