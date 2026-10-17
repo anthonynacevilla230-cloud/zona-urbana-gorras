@@ -32,7 +32,8 @@
         .top-banner { background-color: var(--accent-yellow); color: #000; text-align: center; padding: 10px 0; font-weight: 700; font-size: 0.9rem; text-transform: uppercase; }
         header { background-color: rgba(18, 18, 18, 0.95); border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 1000; }
         .nav-container { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; max-width: 1200px; margin: 0 auto; }
-        .nav-links { display: flex; gap: 20px; font-size: 0.9rem; font-weight: 600; }
+        .nav-links { display: flex; gap: 15px; font-size: 0.85rem; font-weight: 600; flex-wrap: wrap; }
+        .nav-links a { cursor: pointer; }
         .nav-links a:hover { color: var(--accent-yellow); }
         .nav-icons { display: flex; gap: 15px; align-items: center; }
         .btn-admin { border: 1px solid var(--accent-yellow); padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; display: flex; align-items: center; gap: 5px; cursor: pointer; background: transparent; color: var(--accent-yellow); }
@@ -74,8 +75,9 @@
         .catalog-section { padding: 40px 0; }
         .catalog-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 30px; }
         .catalog-header h2 { font-size: 2.5rem; font-weight: 900; text-transform: uppercase; }
-        .catalog-filters { display: flex; gap: 10px; flex-wrap: wrap; }
-        .filter-btn { background-color: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-white); padding: 8px 15px; border-radius: 20px; font-size: 0.8rem; cursor: pointer; }
+        .catalog-filters { display: flex; gap: 8px; flex-wrap: wrap; }
+        .filter-btn { background-color: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-white); padding: 6px 12px; border-radius: 20px; font-size: 0.75rem; cursor: pointer; transition: all 0.2s; }
+        .filter-btn:hover { border-color: var(--accent-yellow); }
         .filter-btn.active { background-color: var(--accent-yellow); color: #000; border-color: var(--accent-yellow); font-weight: 700; }
         .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
         .product-card { background-color: var(--bg-card); border-radius: 10px; overflow: hidden; border: 1px solid var(--border-color); position: relative; }
@@ -92,7 +94,6 @@
         .btn-add { background-color: #333; border: none; color: white; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: 600; }
         .btn-add:hover { background-color: var(--accent-yellow); color: #000; }
         
-        /* PANEL DE ADMINISTRACIÓN */
         .admin-panel { display: none; background-color: #1a1a1a; border: 1px solid var(--accent-yellow); border-radius: 10px; padding: 20px; margin: 20px auto; max-width: 900px; position: relative; }
         .admin-panel.active { display: block; }
         .admin-panel h3 { color: var(--accent-yellow); margin-bottom: 15px; }
@@ -214,13 +215,27 @@
 
     <header>
         <div class="nav-container">
-            <nav class="nav-links">
-                <a href="#">Todos</a>
-                <a href="#">Snapback</a>
-                <a href="#">Trucker</a>
-                <a href="#">Béisbol / Curved</a>
-                <a href="#">Gorros / Beanies</a>
-                <a href="#" style="color: var(--accent-yellow);">Custom 3D</a>
+            <!-- BARRA DE NAVEGACIÓN CON TODAS LAS CATEGORÍAS -->
+            <nav class="nav-links" id="navLinks">
+                <a onclick="filterProducts('all', this)" class="active">Todos</a>
+                <a onclick="filterProducts('snapback', this)">Snapback</a>
+                <a onclick="filterProducts('trucker', this)">Trucker</a>
+                <a onclick="filterProducts('curved', this)">Béisbol / Curved</a>
+                <a onclick="filterProducts('beanies', this)">Gorros / Beanies</a>
+                <a onclick="filterProducts('custom', this)">Custom 3D</a>
+                <a onclick="filterProducts('mallas-llanas', this)">Mallas Llanas</a>
+                <a onclick="filterProducts('mallas', this)">Mallas</a>
+                <a onclick="filterProducts('planas', this)">Planas</a>
+                <a onclick="filterProducts('planas-a1', this)">Planas A.1</a>
+                <a onclick="filterProducts('semiplanas', this)">Semiplanas</a>
+                <a onclick="filterProducts('semiplanas-a1', this)">Semiplanas A.1</a>
+                <a onclick="filterProducts('belicas', this)">Bélicas</a>
+                <a onclick="filterProducts('especiales-uni', this)">Especiales Uni</a>
+                <a onclick="filterProducts('llanas', this)">Llanas</a>
+                <a onclick="filterProducts('gorras-diseno', this)">Gorras Diseño</a>
+                <a onclick="filterProducts('marcas-carros', this)">Marcas Carros</a>
+                <a onclick="filterProducts('a1', this)">A.1</a>
+                <a onclick="filterProducts('rancheras', this)">Rancheras</a>
             </nav>
             <div class="nav-icons">
                 <button class="btn-admin" id="toggleAdmin"><i class="fas fa-user"></i> Admin</button>
@@ -379,12 +394,8 @@
                 <h2>CATÁLOGO DE GORRAS</h2>
                 <p style="color: var(--text-gray); font-size: 0.9rem;">Filtra entre viseras planas, curvadas, truckers y beanies urbanos</p>
             </div>
-            <div class="catalog-filters">
-                <button class="filter-btn active">TODAS</button>
-                <button class="filter-btn">SNAPBACKS</button>
-                <button class="filter-btn">TRUCKER</button>
-                <button class="filter-btn">CURVED / DAD</button>
-                <button class="filter-btn">GORROS / BEANIES</button>
+            <div class="catalog-filters" id="catalogFilters">
+                <!-- Los filtros se generan dinámicamente desde JavaScript -->
             </div>
         </div>
         <div class="product-grid" id="productGrid"></div>
@@ -492,8 +503,9 @@
         let selectedPayment = null;
         let selectedDelivery = 'envio';
         let selectedFiles = { 1: null, 2: null };
+        let currentFilter = 'all';
 
-        // CATEGORÍAS DISPONIBLES
+        // LISTA COMPLETA DE CATEGORÍAS
         const categorias = [
             { value: "snapback", label: "Snapback" },
             { value: "trucker", label: "Trucker" },
@@ -521,6 +533,7 @@
             { name: "Trucker Clásica Blanca", price: "24.99", category: "trucker", images: ["https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=400&h=400&fit=crop", "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=400&h=400&fit=crop"] }
         ];
 
+        // LOGIN
         const loginModal = document.getElementById('loginModal');
         const toggleAdminBtn = document.getElementById('toggleAdmin');
         const loginBtn = document.getElementById('loginBtn');
@@ -559,6 +572,31 @@
         });
         window.addEventListener('click', (e) => { if (e.target === loginModal) loginModal.classList.remove('active'); });
 
+        // FILTROS
+        function filterProducts(category, element) {
+            currentFilter = category;
+            document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+            if (element) element.classList.add('active');
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            const filterBtn = Array.from(document.querySelectorAll('.filter-btn')).find(b => b.dataset.category === category);
+            if (filterBtn) filterBtn.classList.add('active');
+            loadProducts();
+        }
+
+        function generateFilters() {
+            const filterContainer = document.getElementById('catalogFilters');
+            filterContainer.innerHTML = '<button class="filter-btn active" data-category="all" onclick="filterProducts(\'all\')">TODAS</button>';
+            categorias.forEach(cat => {
+                const btn = document.createElement('button');
+                btn.className = 'filter-btn';
+                btn.textContent = cat.label.toUpperCase();
+                btn.dataset.category = cat.value;
+                btn.onclick = () => filterProducts(cat.value);
+                filterContainer.appendChild(btn);
+            });
+        }
+
+        // SUBIDA
         window.handleFileSelect = function(slotNum) {
             const input = document.getElementById('fileInput' + slotNum);
             const slot = document.getElementById('slot' + slotNum);
@@ -640,6 +678,7 @@
             btn.disabled = false;
         });
 
+        // CARRITO
         const toggleCartBtn = document.getElementById('toggleCart');
         const closeCartBtn = document.getElementById('closeCartBtn');
         const cartSidebar = document.getElementById('cartSidebar');
@@ -766,6 +805,7 @@
             cartSidebar.classList.remove('open');
         });
 
+        // SIMULADOR
         function changeCapColor(element) {
             document.querySelectorAll('#capColorOptions .color-circle').forEach(c => c.classList.remove('active'));
             element.classList.add('active');
@@ -781,6 +821,7 @@
             document.getElementById('embroideryPreview').textContent = e.target.value || 'URBAN';
         });
 
+        // PRODUCTOS
         const productGrid = document.getElementById('productGrid');
         const adminProductList = document.getElementById('adminProductList');
 
@@ -792,7 +833,7 @@
         function renderProducts(products) {
             productGrid.innerHTML = '';
             if (products.length === 0) {
-                productGrid.innerHTML = '<p style="color: var(--text-gray); grid-column: 1/-1; text-align: center;">No hay productos.</p>';
+                productGrid.innerHTML = '<p style="color: var(--text-gray); grid-column: 1/-1; text-align: center;">No hay productos en esta categoría.</p>';
                 return;
             }
             products.forEach((prod, index) => {
@@ -821,7 +862,15 @@
 
         function loadProducts() {
             const savedProducts = JSON.parse(localStorage.getItem('zonaUrbanaProducts')) || [];
-            renderProducts(savedProducts);
+            
+            // Filtrar productos
+            let filtered = savedProducts;
+            if (currentFilter !== 'all') {
+                filtered = savedProducts.filter(prod => prod.category === currentFilter);
+            }
+            
+            renderProducts(filtered);
+            
             adminProductList.innerHTML = '<h4 style="color: var(--accent-yellow); margin-bottom: 15px; font-size: 1.1rem;"><i class="fas fa-edit"></i> Editar Productos Existentes</h4>';
             if (savedProducts.length > 0) {
                 savedProducts.forEach((prod, index) => {
@@ -899,7 +948,9 @@
             }
         };
 
+        // INICIALIZACIÓN
         initializeProducts();
+        generateFilters();
         loadProducts();
         updateCartUI();
     </script>
