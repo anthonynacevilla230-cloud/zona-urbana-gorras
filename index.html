@@ -105,10 +105,10 @@
         .special-box-header i { color: var(--accent-yellow); font-size: 1.2rem; }
         .special-box-header h3 { color: var(--accent-yellow); font-size: 1rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
         .special-box-products { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .special-product-item { background: #111; border-radius: 8px; overflow: hidden; border: 1px solid #333; transition: transform 0.3s, border-color 0.3s; animation: fadeIn 0.5s; }
+        .special-product-item { background: #111; border-radius: 8px; overflow: hidden; border: 1px solid #333; transition: transform 0.3s, border-color 0.3s; animation: fadeIn 0.5s; cursor: pointer; }
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
         .special-product-item:hover { transform: translateY(-3px); border-color: var(--accent-yellow); }
-        .special-product-img { width: 100%; height: 90px; object-fit: cover; background: #fff; }
+        .special-product-img { width: 100%; height: 90px; object-fit: contain; background: #fff; }
         .special-product-info { padding: 8px; }
         .special-product-name { font-size: 0.7rem; color: var(--text-white); font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .special-product-price { font-size: 0.8rem; color: var(--accent-yellow); font-weight: 900; margin-top: 3px; }
@@ -125,18 +125,8 @@
         .product-card { background-color: var(--bg-card); border-radius: 10px; overflow: hidden; border: 1px solid var(--border-color); position: relative; }
         .product-img-container { width: 100%; height: 250px; position: relative; overflow: hidden; background: #fff; }
         
-        /* AJUSTE CLAVE: scale-down para que la imagen se adapte sin recortarse ni quedar muy pequeña */
-        .product-img-container img { 
-            width: 100%; 
-            height: 100%; 
-            object-fit: scale-down; 
-            position: absolute; 
-            top: 0; 
-            left: 0; 
-            opacity: 0; 
-            transition: opacity 0.3s; 
-            padding: 0; /* Sin padding para que llene mejor el espacio */
-        }
+        /* IMAGEN CON CURSOR PARA INDICAR QUE SE PUEDE AMPLIAR */
+        .product-img-container img { width: 100%; height: 100%; object-fit: contain; position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 0.3s; padding: 10px; cursor: zoom-in; }
         
         .product-img-container img.active { opacity: 1; }
         .carousel-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; z-index: 5; display: flex; justify-content: center; align-items: center; }
@@ -242,6 +232,60 @@
         .social-icons { display: flex; gap: 15px; margin-top: 20px; }
         .social-icons a { color: var(--text-gray); font-size: 1.2rem; }
         
+        /* =========================================
+           ESTILOS PARA EL VISOR DE IMÁGENES (LIGHTBOX)
+           ========================================= */
+        .image-modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .image-modal.active {
+            display: flex;
+            opacity: 1;
+        }
+        .image-modal-img {
+            max-width: 90%;
+            max-height: 80vh;
+            object-fit: contain;
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.8);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+        .image-modal.active .image-modal-img {
+            transform: scale(1);
+        }
+        .image-modal-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: #fff;
+            font-size: 3rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .image-modal-close:hover {
+            color: var(--accent-yellow);
+        }
+        .image-modal-hint {
+            position: absolute;
+            bottom: 20px;
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
         @media (max-width: 992px) { 
             .hero-content { grid-template-columns: 1fr; } 
             .hero-text { text-align: center; }
@@ -373,6 +417,13 @@
             <button id="loginBtn">Ingresar</button>
             <button id="closeLoginBtn" style="background: transparent; color: var(--text-gray); margin-top: 10px; border: 1px solid var(--border-color);">Cancelar</button>
         </div>
+    </div>
+
+    <!-- VISOR DE IMÁGENES (LIGHTBOX) -->
+    <div id="imageModal" class="image-modal">
+        <span class="image-modal-close" onclick="closeImageModal()">&times;</span>
+        <img class="image-modal-img" id="imageModalImg" src="" alt="Imagen ampliada">
+        <div class="image-modal-hint">Haz clic fuera de la imagen para cerrar</div>
     </div>
 
     <div class="container">
@@ -922,6 +973,28 @@
         const productGrid = document.getElementById('productGrid');
         const adminProductList = document.getElementById('adminProductList');
 
+        // FUNCIÓN PARA ABRIR EL VISOR DE IMÁGENES
+        window.openImageModal = function(imageSrc) {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('imageModalImg');
+            modalImg.src = imageSrc;
+            modal.classList.add('active');
+        };
+
+        // FUNCIÓN PARA CERRAR EL VISOR DE IMÁGENES
+        window.closeImageModal = function() {
+            const modal = document.getElementById('imageModal');
+            modal.classList.remove('active');
+            setTimeout(() => { document.getElementById('imageModalImg').src = ''; }, 300); // Limpiar src después de la transición
+        };
+
+        // Cerrar modal al hacer clic fuera de la imagen
+        document.getElementById('imageModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeImageModal();
+            }
+        });
+
         function renderProducts(products) {
             productGrid.innerHTML = '';
             if (products.length === 0) {
@@ -936,12 +1009,19 @@
                 if (images.length > 1) {
                     carouselHTML = `<button class="carousel-btn prev" onclick="changeImage(this, -1)"><i class="fas fa-chevron-left"></i></button><button class="carousel-btn next" onclick="changeImage(this, 1)"><i class="fas fa-chevron-right"></i></button>`;
                 }
-                card.innerHTML = `<div class="product-img-container"><span class="tag">NUEVO</span>${images.map((img, i) => `<img src="${img}" class="${i === 0 ? 'active' : ''}" alt="Gorra">`).join('')}${carouselHTML}</div><div class="product-info"><div class="product-price"><div>$${prod.price || '29.99'}</div><button class="btn-add" onclick="addToCart('${prod.name || 'Modelo'}', ${prod.price || 29.99})"><i class="fas fa-shopping-cart"></i> Añadir</button></div><p style="color: var(--text-gray); font-size: 0.8rem; margin-top: 5px;">${prod.name || 'Modelo'}</p></div>`;
+                
+                // Añadimos el evento onclick a las imágenes para abrir el modal
+                const imagesHTML = images.map((img, i) => `<img src="${img}" class="${i === 0 ? 'active' : ''}" alt="Gorra" onclick="openImageModal('${img}')">`).join('');
+
+                card.innerHTML = `<div class="product-img-container"><span class="tag">NUEVO</span>${imagesHTML}${carouselHTML}</div><div class="product-info"><div class="product-price"><div>$${prod.price || '29.99'}</div><button class="btn-add" onclick="addToCart('${prod.name || 'Modelo'}', ${prod.price || 29.99})"><i class="fas fa-shopping-cart"></i> Añadir</button></div><p style="color: var(--text-gray); font-size: 0.8rem; margin-top: 5px;">${prod.name || 'Modelo'}</p></div>`;
                 productGrid.appendChild(card);
             });
         }
 
         window.changeImage = function(btn, direction) {
+            // Evitar que el clic en el botón del carrusel abra el modal de imagen
+            event.stopPropagation(); 
+            
             const container = btn.closest('.product-img-container');
             const images = container.querySelectorAll('img');
             let activeIndex = -1;
@@ -1048,12 +1128,13 @@
             const shuffled = [...a1Products].sort(() => Math.random() - 0.5);
             const selected = shuffled.slice(0, 4);
 
+            // Añadimos el evento onclick a la imagen del recuadro especial
             container.innerHTML = selected.map(prod => {
                 const image = (prod.images && prod.images[0]) || 'https://via.placeholder.com/100x100?text=Gorra';
                 return `
-                    <div class="special-product-item" onclick="addToCart('${prod.name}', ${prod.price})">
-                        <img src="${image}" class="special-product-img" alt="${prod.name}">
-                        <div class="special-product-info">
+                    <div class="special-product-item">
+                        <img src="${image}" class="special-product-img" alt="${prod.name}" onclick="openImageModal('${image}')">
+                        <div class="special-product-info" onclick="addToCart('${prod.name}', ${prod.price})">
                             <div class="special-product-name">${prod.name}</div>
                             <div class="special-product-price">$${prod.price}</div>
                         </div>
