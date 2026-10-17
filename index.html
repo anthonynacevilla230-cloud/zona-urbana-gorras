@@ -92,13 +92,12 @@
         .btn-add { background-color: #333; border: none; color: white; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: 600; }
         .btn-add:hover { background-color: var(--accent-yellow); color: #000; }
         
-        /* PANEL DE ADMINISTRACIÓN MEJORADO */
+        /* PANEL DE ADMINISTRACIÓN */
         .admin-panel { display: none; background-color: #1a1a1a; border: 1px solid var(--accent-yellow); border-radius: 10px; padding: 20px; margin: 20px auto; max-width: 900px; position: relative; }
         .admin-panel.active { display: block; }
         .admin-panel h3 { color: var(--accent-yellow); margin-bottom: 15px; }
         .btn-logout { position: absolute; top: 20px; right: 20px; background-color: transparent; border: 1px solid #e74c3c; color: #e74c3c; padding: 5px 15px; border-radius: 20px; cursor: pointer; font-size: 0.8rem; font-weight: 700; }
         
-        /* NUEVOS CAMPOS GRANDES Y VISIBLES PARA NOMBRE, PRECIO Y CATEGORÍA */
         .product-form-top { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 15px; background: #222; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid var(--accent-yellow); }
         .product-form-top label { display: block; font-size: 0.8rem; color: var(--accent-yellow); margin-bottom: 5px; font-weight: 700; }
         .product-form-top input, .product-form-top select { width: 100%; padding: 12px; border-radius: 5px; border: 1px solid #444; background: #111; color: white; font-size: 1rem; }
@@ -122,7 +121,6 @@
         .admin-product-list { margin-top: 20px; border-top: 1px solid var(--border-color); padding-top: 15px; }
         .admin-product-item { display: flex; justify-content: space-between; align-items: center; background: #222; padding: 15px; margin-bottom: 10px; border-radius: 5px; flex-wrap: wrap; gap: 10px; border: 1px solid #444; }
         
-        /* ESTILOS DE EDICIÓN MUY VISIBLES */
         .edit-container { display: flex; flex-direction: column; gap: 5px; }
         .edit-container label { font-size: 0.65rem; color: var(--accent-yellow); text-transform: uppercase; font-weight: 700; }
         .edit-input { background: #111; border: 1px solid var(--accent-yellow); color: white; padding: 8px; border-radius: 5px; font-size: 0.9rem; transition: border 0.2s; }
@@ -302,7 +300,6 @@
                 <button class="btn-logout" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button>
             </div>
             
-            <!-- NUEVOS CAMPOS DESTACADOS -->
             <div class="product-form-top">
                 <div>
                     <label><i class="fas fa-tag"></i> Nombre del Producto</label>
@@ -320,6 +317,19 @@
                         <option value="curved">Curved/Dad</option>
                         <option value="beanies">Gorros/Beanies</option>
                         <option value="custom">Custom 3D</option>
+                        <option value="mallas-llanas">Mallas Llanas</option>
+                        <option value="mallas">Mallas</option>
+                        <option value="planas">Planas</option>
+                        <option value="planas-a1">Planas A.1</option>
+                        <option value="semiplanas">Semiplanas</option>
+                        <option value="semiplanas-a1">Semiplanas A.1</option>
+                        <option value="belicas">Bélicas</option>
+                        <option value="especiales-uni">Especiales Uni</option>
+                        <option value="llanas">Llanas</option>
+                        <option value="gorras-diseno">Gorras Diseño</option>
+                        <option value="marcas-carros">Marcas Carros</option>
+                        <option value="a1">A.1</option>
+                        <option value="rancheras">Rancheras</option>
                     </select>
                 </div>
             </div>
@@ -343,7 +353,6 @@
 
             <div class="admin-product-list" id="adminProductList">
                 <h4 style="color: var(--accent-yellow); margin-bottom: 15px; font-size: 1.1rem;"><i class="fas fa-edit"></i> Editar Productos Existentes</h4>
-                <!-- Los productos se cargan aquí -->
             </div>
         </div>
     </div>
@@ -483,6 +492,28 @@
         let selectedPayment = null;
         let selectedDelivery = 'envio';
         let selectedFiles = { 1: null, 2: null };
+
+        // CATEGORÍAS DISPONIBLES
+        const categorias = [
+            { value: "snapback", label: "Snapback" },
+            { value: "trucker", label: "Trucker" },
+            { value: "curved", label: "Curved/Dad" },
+            { value: "beanies", label: "Gorros/Beanies" },
+            { value: "custom", label: "Custom 3D" },
+            { value: "mallas-llanas", label: "Mallas Llanas" },
+            { value: "mallas", label: "Mallas" },
+            { value: "planas", label: "Planas" },
+            { value: "planas-a1", label: "Planas A.1" },
+            { value: "semiplanas", label: "Semiplanas" },
+            { value: "semiplanas-a1", label: "Semiplanas A.1" },
+            { value: "belicas", label: "Bélicas" },
+            { value: "especiales-uni", label: "Especiales Uni" },
+            { value: "llanas", label: "Llanas" },
+            { value: "gorras-diseno", label: "Gorras Diseño" },
+            { value: "marcas-carros", label: "Marcas Carros" },
+            { value: "a1", label: "A.1" },
+            { value: "rancheras", label: "Rancheras" }
+        ];
 
         const defaultProducts = [
             { name: "Cyber Black Snapback", price: "34.99", category: "snapback", images: ["https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=400&h=400&fit=crop", "https://images.unsplash.com/photo-1575428652377-a2d80e2277fc?w=400&h=400&fit=crop"] },
@@ -814,11 +845,7 @@
                             <div class="edit-container">
                                 <label>Categoría</label>
                                 <select onchange="updateProduct(${index}, 'category', this.value)">
-                                    <option value="snapback" ${prod.category === 'snapback' ? 'selected' : ''}>Snapback</option>
-                                    <option value="trucker" ${prod.category === 'trucker' ? 'selected' : ''}>Trucker</option>
-                                    <option value="curved" ${prod.category === 'curved' ? 'selected' : ''}>Curved/Dad</option>
-                                    <option value="beanies" ${prod.category === 'beanies' ? 'selected' : ''}>Gorros/Beanies</option>
-                                    <option value="custom" ${prod.category === 'custom' ? 'selected' : ''}>Custom 3D</option>
+                                    ${categorias.map(cat => `<option value="${cat.value}" ${prod.category === cat.value ? 'selected' : ''}>${cat.label}</option>`).join('')}
                                 </select>
                             </div>
 
