@@ -91,11 +91,20 @@
         .product-price { font-size: 1.2rem; font-weight: 700; display: flex; justify-content: space-between; align-items: center; }
         .btn-add { background-color: #333; border: none; color: white; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: 600; }
         .btn-add:hover { background-color: var(--accent-yellow); color: #000; }
-        .admin-panel { display: none; background-color: #1a1a1a; border: 1px solid var(--accent-yellow); border-radius: 10px; padding: 20px; margin: 20px auto; max-width: 800px; position: relative; }
+        
+        /* PANEL DE ADMINISTRACIÓN MEJORADO */
+        .admin-panel { display: none; background-color: #1a1a1a; border: 1px solid var(--accent-yellow); border-radius: 10px; padding: 20px; margin: 20px auto; max-width: 900px; position: relative; }
         .admin-panel.active { display: block; }
         .admin-panel h3 { color: var(--accent-yellow); margin-bottom: 15px; }
         .btn-logout { position: absolute; top: 20px; right: 20px; background-color: transparent; border: 1px solid #e74c3c; color: #e74c3c; padding: 5px 15px; border-radius: 20px; cursor: pointer; font-size: 0.8rem; font-weight: 700; }
-        .upload-slots { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        
+        /* NUEVOS CAMPOS GRANDES Y VISIBLES PARA NOMBRE, PRECIO Y CATEGORÍA */
+        .product-form-top { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 15px; background: #222; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid var(--accent-yellow); }
+        .product-form-top label { display: block; font-size: 0.8rem; color: var(--accent-yellow); margin-bottom: 5px; font-weight: 700; }
+        .product-form-top input, .product-form-top select { width: 100%; padding: 12px; border-radius: 5px; border: 1px solid #444; background: #111; color: white; font-size: 1rem; }
+        .product-form-top input:focus, .product-form-top select:focus { outline: none; border-color: var(--accent-yellow); }
+
+        .upload-slots { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
         .upload-slot { border: 2px dashed var(--border-color); padding: 20px; text-align: center; border-radius: 10px; cursor: pointer; transition: all 0.3s; min-height: 180px; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; overflow: hidden; }
         .upload-slot:hover { border-color: var(--accent-yellow); }
         .upload-slot.filled { border-style: solid; border-color: var(--success-green); }
@@ -104,19 +113,29 @@
         .upload-slot p { color: var(--text-gray); font-size: 0.85rem; }
         .upload-slot .preview-img { width: 100%; height: 150px; object-fit: contain; margin-bottom: 10px; }
         .upload-slot .status-text { font-size: 0.75rem; margin-top: 5px; font-weight: 700; color: var(--success-green); }
+
         .upload-actions { display: flex; gap: 10px; margin-bottom: 20px; }
         .btn-upload { background-color: var(--accent-yellow); color: #000; border: none; padding: 12px 20px; border-radius: 5px; font-weight: 700; cursor: pointer; flex: 1; font-size: 1rem; }
         .btn-upload:disabled { background-color: #555; cursor: not-allowed; color: #999; }
         .btn-clear { background-color: transparent; color: #e74c3c; border: 1px solid #e74c3c; padding: 12px 20px; border-radius: 5px; font-weight: 700; cursor: pointer; }
+        
         .admin-product-list { margin-top: 20px; border-top: 1px solid var(--border-color); padding-top: 15px; }
-        .admin-product-item { display: flex; justify-content: space-between; align-items: center; background: #222; padding: 10px; margin-bottom: 10px; border-radius: 5px; flex-wrap: wrap; gap: 10px; }
-        .admin-product-item input { background: #333; border: 1px solid #444; color: white; padding: 5px; border-radius: 3px; width: 80px; }
-        .admin-product-item input[type="text"] { width: 120px; }
-        .admin-product-item select { background: #333; border: 1px solid #444; color: white; padding: 5px; border-radius: 3px; font-size: 0.8rem; }
-        .admin-product-item button { background: #e74c3c; border: none; color: white; padding: 5px 10px; border-radius: 3px; cursor: pointer; }
+        .admin-product-item { display: flex; justify-content: space-between; align-items: center; background: #222; padding: 15px; margin-bottom: 10px; border-radius: 5px; flex-wrap: wrap; gap: 10px; border: 1px solid #444; }
+        
+        /* ESTILOS DE EDICIÓN MUY VISIBLES */
+        .edit-container { display: flex; flex-direction: column; gap: 5px; }
+        .edit-container label { font-size: 0.65rem; color: var(--accent-yellow); text-transform: uppercase; font-weight: 700; }
+        .edit-input { background: #111; border: 1px solid var(--accent-yellow); color: white; padding: 8px; border-radius: 5px; font-size: 0.9rem; transition: border 0.2s; }
+        .edit-input:focus { outline: none; border-color: white; box-shadow: 0 0 8px rgba(245,183,0,0.5); }
+        .edit-input.name { width: 150px; }
+        .edit-input.price { width: 90px; }
+        .admin-product-item select { background: #111; border: 1px solid var(--accent-yellow); color: white; padding: 8px; border-radius: 5px; font-size: 0.9rem; }
+
         .admin-thumbs { display: flex; gap: 5px; align-items: center; }
-        .admin-thumbs img { width: 35px; height: 35px; object-fit: cover; border-radius: 3px; border: 1px solid #444; }
-        .btn-add-photo { background: var(--accent-yellow); color: #000; border: none; padding: 5px 8px; border-radius: 3px; cursor: pointer; font-size: 0.7rem; font-weight: 700; }
+        .admin-thumbs img { width: 40px; height: 40px; object-fit: cover; border-radius: 3px; border: 1px solid #444; }
+        .btn-add-photo { background: #333; color: white; border: none; padding: 8px 10px; border-radius: 5px; cursor: pointer; font-size: 0.75rem; font-weight: 700; }
+        .btn-delete-prod { background: #e74c3c; border: none; color: white; padding: 8px 10px; border-radius: 5px; cursor: pointer; }
+
         .login-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); z-index: 4000; justify-content: center; align-items: center; }
         .login-modal.active { display: flex; }
         .login-box { background-color: var(--bg-card); border: 1px solid var(--accent-yellow); border-radius: 10px; padding: 30px; width: 100%; max-width: 400px; text-align: center; }
@@ -175,7 +194,7 @@
         .footer-logo span { color: var(--accent-yellow); }
         .social-icons { display: flex; gap: 15px; margin-top: 20px; }
         .social-icons a { color: var(--text-gray); font-size: 1.2rem; }
-        @media (max-width: 992px) { .simulator-content { grid-template-columns: 1fr; } .custom-grid { grid-template-columns: 1fr; } .footer-grid { grid-template-columns: 1fr 1fr; } .cart-sidebar { width: 100%; right: -100%; } .upload-slots { grid-template-columns: 1fr; } }
+        @media (max-width: 992px) { .simulator-content { grid-template-columns: 1fr; } .custom-grid { grid-template-columns: 1fr; } .footer-grid { grid-template-columns: 1fr 1fr; } .cart-sidebar { width: 100%; right: -100%; } .upload-slots { grid-template-columns: 1fr; } .product-form-top { grid-template-columns: 1fr; } }
         @media (max-width: 768px) { .nav-links { display: none; } .hero h1 { font-size: 2rem; } .features-bar { flex-direction: column; gap: 15px; align-items: flex-start; } .catalog-header { flex-direction: column; align-items: flex-start; gap: 15px; } .care-grid { grid-template-columns: 1fr; } .footer-grid { grid-template-columns: 1fr; gap: 40px; } .brand-name { font-size: 1.5rem; } .brand-logo-icon { width: 45px; height: 45px; font-size: 1.5rem; } }
     </style>
 </head>
@@ -282,6 +301,29 @@
                 <h3><i class="fas fa-cloud-upload-alt"></i> Panel de Administración</h3>
                 <button class="btn-logout" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button>
             </div>
+            
+            <!-- NUEVOS CAMPOS DESTACADOS -->
+            <div class="product-form-top">
+                <div>
+                    <label><i class="fas fa-tag"></i> Nombre del Producto</label>
+                    <input type="text" id="newName" placeholder="Ej: Gorra Yankees Roja">
+                </div>
+                <div>
+                    <label><i class="fas fa-dollar-sign"></i> Precio ($)</label>
+                    <input type="number" id="newPrice" placeholder="Ej: 35.00" step="0.01">
+                </div>
+                <div>
+                    <label><i class="fas fa-list"></i> Categoría</label>
+                    <select id="newCategory">
+                        <option value="snapback">Snapback</option>
+                        <option value="trucker">Trucker</option>
+                        <option value="curved">Curved/Dad</option>
+                        <option value="beanies">Gorros/Beanies</option>
+                        <option value="custom">Custom 3D</option>
+                    </select>
+                </div>
+            </div>
+
             <div class="upload-slots">
                 <div class="upload-slot" id="slot1" onclick="document.getElementById('fileInput1').click()">
                     <i class="fas fa-camera"></i>
@@ -298,8 +340,10 @@
                 <button class="btn-upload" id="uploadBtn" disabled><i class="fas fa-cloud-upload-alt"></i> Subir Producto</button>
                 <button class="btn-clear" id="clearBtn"><i class="fas fa-times"></i> Limpiar</button>
             </div>
+
             <div class="admin-product-list" id="adminProductList">
-                <h4 style="color: var(--accent-yellow); margin-bottom: 10px;">Editar Productos</h4>
+                <h4 style="color: var(--accent-yellow); margin-bottom: 15px; font-size: 1.1rem;"><i class="fas fa-edit"></i> Editar Productos Existentes</h4>
+                <!-- Los productos se cargan aquí -->
             </div>
         </div>
     </div>
@@ -511,12 +555,19 @@
             document.getElementById('slot2').classList.remove('filled');
             document.getElementById('slot1').innerHTML = `<i class="fas fa-camera"></i><p>Foto 1</p><input type="file" id="fileInput1" onchange="handleFileSelect(1)">`;
             document.getElementById('slot2').innerHTML = `<i class="fas fa-camera"></i><p>Foto 2 (opcional)</p><input type="file" id="fileInput2" onchange="handleFileSelect(2)">`;
+            document.getElementById('newName').value = '';
+            document.getElementById('newPrice').value = '';
             checkUploadReady();
         });
 
         document.getElementById('uploadBtn').addEventListener('click', async () => {
             const btn = document.getElementById('uploadBtn');
             if (!selectedFiles[1]) { alert('Debes seleccionar al menos la Foto 1.'); return; }
+            
+            const newName = document.getElementById('newName').value || 'Nuevo Modelo';
+            const newPrice = document.getElementById('newPrice').value || '29.99';
+            const newCategory = document.getElementById('newCategory').value;
+
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Subiendo a Cloudinary...';
             btn.disabled = true;
             const uploadedUrls = [];
@@ -547,11 +598,11 @@
 
             if (uploadedUrls.length > 0) {
                 let products = JSON.parse(localStorage.getItem('zonaUrbanaProducts')) || [];
-                products.push({ images: uploadedUrls, name: 'Nuevo Modelo', price: '29.99', category: 'snapback' });
+                products.push({ images: uploadedUrls, name: newName, price: newPrice, category: newCategory });
                 localStorage.setItem('zonaUrbanaProducts', JSON.stringify(products));
                 loadProducts();
                 document.getElementById('clearBtn').click();
-                alert('¡Producto subido con éxito! Ahora edita el nombre, precio y categoría.');
+                alert('¡Producto subido con éxito! Ahora aparece en el catálogo.');
             }
 
             btn.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Subir Producto';
@@ -740,13 +791,41 @@
         function loadProducts() {
             const savedProducts = JSON.parse(localStorage.getItem('zonaUrbanaProducts')) || [];
             renderProducts(savedProducts);
-            adminProductList.innerHTML = '<h4 style="color: var(--accent-yellow); margin-bottom: 10px;">Editar Productos</h4>';
+            adminProductList.innerHTML = '<h4 style="color: var(--accent-yellow); margin-bottom: 15px; font-size: 1.1rem;"><i class="fas fa-edit"></i> Editar Productos Existentes</h4>';
             if (savedProducts.length > 0) {
                 savedProducts.forEach((prod, index) => {
                     const images = prod.images || [prod.image];
                     const item = document.createElement('div');
                     item.className = 'admin-product-item';
-                    item.innerHTML = `<div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;"><div class="admin-thumbs">${images.map(img => `<img src="${img}" alt="thumb">`).join('')}</div><input type="text" value="${prod.name || 'Modelo'}" onchange="updateProduct(${index}, 'name', this.value)" placeholder="Nombre"><input type="number" value="${prod.price || '29.99'}" onchange="updateProduct(${index}, 'price', this.value)" placeholder="Precio" step="0.01"><select onchange="updateProduct(${index}, 'category', this.value)"><option value="snapback" ${prod.category === 'snapback' ? 'selected' : ''}>Snapback</option><option value="trucker" ${prod.category === 'trucker' ? 'selected' : ''}>Trucker</option><option value="curved" ${prod.category === 'curved' ? 'selected' : ''}>Curved/Dad</option><option value="beanies" ${prod.category === 'beanies' ? 'selected' : ''}>Gorros/Beanies</option><option value="custom" ${prod.category === 'custom' ? 'selected' : ''}>Custom 3D</option></select><button class="btn-add-photo" onclick="addPhotoToProduct(${index})"><i class="fas fa-plus"></i> Añadir Foto</button></div><button onclick="deleteProduct(${index})"><i class="fas fa-trash"></i></button>`;
+                    item.innerHTML = `
+                        <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+                            <div class="admin-thumbs">${images.map(img => `<img src="${img}" alt="thumb">`).join('')}</div>
+                            
+                            <div class="edit-container">
+                                <label>Nombre</label>
+                                <input class="edit-input name" type="text" value="${prod.name || 'Modelo'}" onchange="updateProduct(${index}, 'name', this.value)" placeholder="Nombre">
+                            </div>
+                            
+                            <div class="edit-container">
+                                <label>Precio</label>
+                                <input class="edit-input price" type="number" value="${prod.price || '29.99'}" onchange="updateProduct(${index}, 'price', this.value)" placeholder="Precio" step="0.01">
+                            </div>
+
+                            <div class="edit-container">
+                                <label>Categoría</label>
+                                <select onchange="updateProduct(${index}, 'category', this.value)">
+                                    <option value="snapback" ${prod.category === 'snapback' ? 'selected' : ''}>Snapback</option>
+                                    <option value="trucker" ${prod.category === 'trucker' ? 'selected' : ''}>Trucker</option>
+                                    <option value="curved" ${prod.category === 'curved' ? 'selected' : ''}>Curved/Dad</option>
+                                    <option value="beanies" ${prod.category === 'beanies' ? 'selected' : ''}>Gorros/Beanies</option>
+                                    <option value="custom" ${prod.category === 'custom' ? 'selected' : ''}>Custom 3D</option>
+                                </select>
+                            </div>
+
+                            <button class="btn-add-photo" onclick="addPhotoToProduct(${index})"><i class="fas fa-plus"></i> Añadir Foto</button>
+                        </div>
+                        <button class="btn-delete-prod" onclick="deleteProduct(${index})"><i class="fas fa-trash"></i></button>
+                    `;
                     adminProductList.appendChild(item);
                 });
             }
