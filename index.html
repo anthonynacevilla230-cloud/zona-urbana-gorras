@@ -32,12 +32,14 @@
         .top-banner { background-color: var(--accent-yellow); color: #000; text-align: center; padding: 10px 0; font-weight: 700; font-size: 0.9rem; text-transform: uppercase; }
         header { background-color: rgba(18, 18, 18, 0.95); border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 1000; }
         .nav-container { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; max-width: 1200px; margin: 0 auto; }
-        .nav-links { display: flex; gap: 15px; font-size: 0.85rem; font-weight: 600; flex-wrap: wrap; }
-        .nav-links a { cursor: pointer; }
-        .nav-links a:hover { color: var(--accent-yellow); }
+        .nav-links { display: flex; gap: 10px; font-size: 0.8rem; font-weight: 600; flex-wrap: wrap; }
+        .nav-links a { cursor: pointer; padding: 3px 0; }
+        .nav-links a:hover, .nav-links a.active { color: var(--accent-yellow); }
         .nav-icons { display: flex; gap: 15px; align-items: center; }
         .btn-admin { border: 1px solid var(--accent-yellow); padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; display: flex; align-items: center; gap: 5px; cursor: pointer; background: transparent; color: var(--accent-yellow); }
         .btn-admin:hover { background-color: var(--accent-yellow); color: #000; }
+        
+        /* CARRITO LATERAL */
         .cart-sidebar { position: fixed; top: 0; right: -450px; width: 420px; height: 100vh; background-color: #1a1a1a; border-left: 1px solid var(--border-color); z-index: 3000; transition: right 0.3s ease; display: flex; flex-direction: column; padding: 20px; overflow-y: auto; }
         .cart-sidebar.open { right: 0; }
         .cart-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; margin-bottom: 15px; }
@@ -64,6 +66,7 @@
         .total-row.discount { color: var(--success-green); }
         .total-row.final { font-size: 1.2rem; font-weight: 900; color: white; margin-top: 10px; border-top: 1px solid var(--border-color); padding-top: 10px; }
         .btn-checkout { background-color: var(--accent-yellow); color: #000; border: none; padding: 15px; border-radius: 5px; font-weight: 900; cursor: pointer; width: 100%; font-size: 1rem; display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 15px; }
+        
         .thankyou-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 5000; justify-content: center; align-items: center; }
         .thankyou-modal.active { display: flex; }
         .thankyou-box { background: var(--bg-card); border: 2px solid var(--accent-yellow); border-radius: 20px; padding: 40px; max-width: 450px; text-align: center; }
@@ -72,11 +75,95 @@
         .thankyou-box h2 { color: var(--accent-yellow); margin-bottom: 10px; }
         .thankyou-box p { color: var(--text-gray); margin-bottom: 20px; }
         .btn-close-thankyou { background: var(--accent-yellow); color: #000; border: none; padding: 12px 30px; border-radius: 5px; font-weight: 700; cursor: pointer; }
+        
+        /* HERO CON NUEVO DISEÑO DE 2 COLUMNAS */
+        .hero { padding: 60px 20px; background: radial-gradient(circle at center, #2a2a2a 0%, #121212 70%); }
+        .hero-content { display: grid; grid-template-columns: 1.5fr 1fr; gap: 40px; align-items: center; max-width: 1200px; margin: 0 auto; }
+        .hero-text { text-align: left; }
+        .hero-badge { display: inline-block; border: 1px solid var(--accent-yellow); color: var(--accent-yellow); padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; margin-bottom: 20px; }
+        .hero h1 { font-size: 3rem; font-weight: 900; margin-bottom: 20px; text-transform: uppercase; line-height: 1.1; }
+        .hero h1 span { color: var(--accent-yellow); }
+        .hero p { color: var(--text-gray); max-width: 600px; margin: 0 0 30px; font-size: 1.1rem; }
+        .hero-buttons { display: flex; justify-content: flex-start; gap: 15px; }
+        .btn-primary { background-color: var(--accent-yellow); color: #000; padding: 12px 25px; border-radius: 5px; font-weight: 700; display: flex; align-items: center; gap: 10px; border: none; cursor: pointer; }
+        .btn-secondary { background-color: transparent; border: 1px solid var(--border-color); color: var(--text-white); padding: 12px 25px; border-radius: 5px; font-weight: 700; display: flex; align-items: center; gap: 10px; cursor: pointer; }
+        
+        /* RECUADRO ESPECIAL A.1 */
+        .special-box {
+            background: linear-gradient(145deg, #1a1a1a, #0a0a0a);
+            border: 2px solid var(--accent-yellow);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 0 25px rgba(245, 183, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            animation: glow 2s infinite alternate;
+        }
+        @keyframes glow {
+            from { box-shadow: 0 0 15px rgba(245, 183, 0, 0.2); }
+            to { box-shadow: 0 0 35px rgba(245, 183, 0, 0.5); }
+        }
+        .special-box-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+        .special-box-header i { color: var(--accent-yellow); font-size: 1.2rem; }
+        .special-box-header h3 { color: var(--accent-yellow); font-size: 1rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
+        .special-box-products {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .special-product-item {
+            background: #111;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #333;
+            transition: transform 0.3s, border-color 0.3s;
+            animation: fadeIn 0.5s;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+        .special-product-item:hover { transform: translateY(-3px); border-color: var(--accent-yellow); }
+        .special-product-img {
+            width: 100%;
+            height: 90px;
+            object-fit: cover;
+            background: #fff;
+        }
+        .special-product-info {
+            padding: 8px;
+        }
+        .special-product-name {
+            font-size: 0.7rem;
+            color: var(--text-white);
+            font-weight: 700;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .special-product-price {
+            font-size: 0.8rem;
+            color: var(--accent-yellow);
+            font-weight: 900;
+            margin-top: 3px;
+        }
+        .special-empty {
+            color: var(--text-gray);
+            font-size: 0.8rem;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        /* CATÁLOGO */
         .catalog-section { padding: 40px 0; }
-        .catalog-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 30px; }
+        .catalog-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 30px; flex-wrap: wrap; gap: 15px; }
         .catalog-header h2 { font-size: 2.5rem; font-weight: 900; text-transform: uppercase; }
-        .catalog-filters { display: flex; gap: 8px; flex-wrap: wrap; }
-        .filter-btn { background-color: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-white); padding: 6px 12px; border-radius: 20px; font-size: 0.75rem; cursor: pointer; transition: all 0.2s; }
+        .catalog-filters { display: flex; gap: 6px; flex-wrap: wrap; }
+        .filter-btn { background-color: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-white); padding: 5px 10px; border-radius: 20px; font-size: 0.7rem; cursor: pointer; transition: all 0.2s; }
         .filter-btn:hover { border-color: var(--accent-yellow); }
         .filter-btn.active { background-color: var(--accent-yellow); color: #000; border-color: var(--accent-yellow); font-weight: 700; }
         .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
@@ -94,6 +181,7 @@
         .btn-add { background-color: #333; border: none; color: white; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: 600; }
         .btn-add:hover { background-color: var(--accent-yellow); color: #000; }
         
+        /* ADMIN PANEL */
         .admin-panel { display: none; background-color: #1a1a1a; border: 1px solid var(--accent-yellow); border-radius: 10px; padding: 20px; margin: 20px auto; max-width: 900px; position: relative; }
         .admin-panel.active { display: block; }
         .admin-panel h3 { color: var(--accent-yellow); margin-bottom: 15px; }
@@ -142,14 +230,7 @@
         .login-box input { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 5px; border: 1px solid var(--border-color); background-color: #151515; color: white; font-size: 1rem; }
         .login-box button { width: 100%; padding: 12px; background-color: var(--accent-yellow); color: #000; border: none; border-radius: 5px; font-weight: 700; cursor: pointer; font-size: 1rem; }
         .error-msg { color: #e74c3c; font-size: 0.8rem; margin-bottom: 10px; display: none; }
-        .hero { text-align: center; padding: 80px 20px; background: radial-gradient(circle at center, #2a2a2a 0%, #121212 70%); }
-        .hero-badge { display: inline-block; border: 1px solid var(--accent-yellow); color: var(--accent-yellow); padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; margin-bottom: 20px; }
-        .hero h1 { font-size: 3rem; font-weight: 900; margin-bottom: 20px; text-transform: uppercase; }
-        .hero h1 span { color: var(--accent-yellow); }
-        .hero p { color: var(--text-gray); max-width: 600px; margin: 0 auto 30px; font-size: 1.1rem; }
-        .hero-buttons { display: flex; justify-content: center; gap: 15px; }
-        .btn-primary { background-color: var(--accent-yellow); color: #000; padding: 12px 25px; border-radius: 5px; font-weight: 700; display: flex; align-items: center; gap: 10px; border: none; cursor: pointer; }
-        .btn-secondary { background-color: transparent; border: 1px solid var(--border-color); color: var(--text-white); padding: 12px 25px; border-radius: 5px; font-weight: 700; display: flex; align-items: center; gap: 10px; cursor: pointer; }
+
         .features-bar { display: flex; justify-content: space-around; padding: 20px; border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); max-width: 1200px; margin: 0 auto 40px; }
         .feature-item { display: flex; align-items: center; gap: 10px; font-size: 0.9rem; color: var(--text-gray); }
         .feature-item i { color: var(--accent-yellow); }
@@ -193,8 +274,28 @@
         .footer-logo span { color: var(--accent-yellow); }
         .social-icons { display: flex; gap: 15px; margin-top: 20px; }
         .social-icons a { color: var(--text-gray); font-size: 1.2rem; }
-        @media (max-width: 992px) { .simulator-content { grid-template-columns: 1fr; } .custom-grid { grid-template-columns: 1fr; } .footer-grid { grid-template-columns: 1fr 1fr; } .cart-sidebar { width: 100%; right: -100%; } .upload-slots { grid-template-columns: 1fr; } .product-form-top { grid-template-columns: 1fr; } }
-        @media (max-width: 768px) { .nav-links { display: none; } .hero h1 { font-size: 2rem; } .features-bar { flex-direction: column; gap: 15px; align-items: flex-start; } .catalog-header { flex-direction: column; align-items: flex-start; gap: 15px; } .care-grid { grid-template-columns: 1fr; } .footer-grid { grid-template-columns: 1fr; gap: 40px; } .brand-name { font-size: 1.5rem; } .brand-logo-icon { width: 45px; height: 45px; font-size: 1.5rem; } }
+        
+        @media (max-width: 992px) { 
+            .hero-content { grid-template-columns: 1fr; } 
+            .hero-text { text-align: center; }
+            .hero-buttons { justify-content: center; }
+            .simulator-content { grid-template-columns: 1fr; } 
+            .custom-grid { grid-template-columns: 1fr; } 
+            .footer-grid { grid-template-columns: 1fr 1fr; } 
+            .cart-sidebar { width: 100%; right: -100%; } 
+            .upload-slots { grid-template-columns: 1fr; } 
+            .product-form-top { grid-template-columns: 1fr; } 
+        }
+        @media (max-width: 768px) { 
+            .nav-links { display: none; } 
+            .hero h1 { font-size: 2rem; } 
+            .features-bar { flex-direction: column; gap: 15px; align-items: flex-start; } 
+            .catalog-header { flex-direction: column; align-items: flex-start; gap: 15px; } 
+            .care-grid { grid-template-columns: 1fr; } 
+            .footer-grid { grid-template-columns: 1fr; gap: 40px; } 
+            .brand-name { font-size: 1.5rem; } 
+            .brand-logo-icon { width: 45px; height: 45px; font-size: 1.5rem; } 
+        }
     </style>
 </head>
 <body>
@@ -215,7 +316,6 @@
 
     <header>
         <div class="nav-container">
-            <!-- BARRA DE NAVEGACIÓN CON TODAS LAS CATEGORÍAS -->
             <nav class="nav-links" id="navLinks">
                 <a onclick="filterProducts('all', this)" class="active">Todos</a>
                 <a onclick="filterProducts('snapback', this)">Snapback</a>
@@ -372,13 +472,29 @@
         </div>
     </div>
 
+    <!-- HERO CON RECUADRO ESPECIAL A LA DERECHA -->
     <section class="hero">
-        <div class="hero-badge"><i class="fas fa-fire"></i> NUEVA COLECCIÓN STREETWEAR 2026</div>
-        <h1>EL ESTILO SE LLEVA EN LA <span>CABEZA.</span></h1>
-        <p>Gorras urbanas prémium con acabados de alta definición, bordados 3D y los mejores encajes Snapback, Flexfit y Dad Hats. Domina las calles con Zona Urbana.</p>
-        <div class="hero-buttons">
-            <a href="#" class="btn-primary">Explorar Gorras <i class="fas fa-arrow-right"></i></a>
-            <a href="#" class="btn-secondary"><i class="fas fa-paint-brush"></i> Personalizar Gorra</a>
+        <div class="hero-content">
+            <div class="hero-text">
+                <div class="hero-badge"><i class="fas fa-fire"></i> NUEVA COLECCIÓN STREETWEAR 2026</div>
+                <h1>EL ESTILO SE LLEVA EN LA <span>CABEZA.</span></h1>
+                <p>Gorras urbanas prémium con acabados de alta definición, bordados 3D y los mejores encajes Snapback, Flexfit y Dad Hats. Domina las calles con Zona Urbana.</p>
+                <div class="hero-buttons">
+                    <a href="#catalogo" class="btn-primary">Explorar Gorras <i class="fas fa-arrow-right"></i></a>
+                    <a href="#" class="btn-secondary"><i class="fas fa-paint-brush"></i> Personalizar Gorra</a>
+                </div>
+            </div>
+            
+            <!-- RECUADRO ESPECIAL A.1 -->
+            <div class="special-box">
+                <div class="special-box-header">
+                    <i class="fas fa-star"></i>
+                    <h3>Modelos Destacados A.1</h3>
+                </div>
+                <div class="special-box-products" id="specialBoxProducts">
+                    <p class="special-empty">Cargando modelos...</p>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -388,7 +504,7 @@
         <div class="feature-item"><i class="fas fa-undo"></i> Cambios Garantizados</div>
     </div>
 
-    <section class="catalog-section container">
+    <section class="catalog-section container" id="catalogo">
         <div class="catalog-header">
             <div>
                 <h2>CATÁLOGO DE GORRAS</h2>
@@ -504,8 +620,9 @@
         let selectedDelivery = 'envio';
         let selectedFiles = { 1: null, 2: null };
         let currentFilter = 'all';
+        let specialBoxInterval = null;
 
-        // LISTA COMPLETA DE CATEGORÍAS
+        // LISTA DE CATEGORÍAS
         const categorias = [
             { value: "snapback", label: "Snapback" },
             { value: "trucker", label: "Trucker" },
@@ -862,13 +979,10 @@
 
         function loadProducts() {
             const savedProducts = JSON.parse(localStorage.getItem('zonaUrbanaProducts')) || [];
-            
-            // Filtrar productos
             let filtered = savedProducts;
             if (currentFilter !== 'all') {
                 filtered = savedProducts.filter(prod => prod.category === currentFilter);
             }
-            
             renderProducts(filtered);
             
             adminProductList.innerHTML = '<h4 style="color: var(--accent-yellow); margin-bottom: 15px; font-size: 1.1rem;"><i class="fas fa-edit"></i> Editar Productos Existentes</h4>';
@@ -905,6 +1019,7 @@
                     adminProductList.appendChild(item);
                 });
             }
+            updateSpecialBox();
         }
 
         window.addPhotoToProduct = function(index) {
@@ -948,11 +1063,51 @@
             }
         };
 
+        // ========================================
+        // RECUADRO ESPECIAL A.1 (CAMBIA CADA 1 SEG)
+        // ========================================
+        function updateSpecialBox() {
+            const allProducts = JSON.parse(localStorage.getItem('zonaUrbanaProducts')) || [];
+            const a1Products = allProducts.filter(prod => prod.category === 'a1');
+
+            const container = document.getElementById('specialBoxProducts');
+            
+            if (a1Products.length === 0) {
+                container.innerHTML = '<p class="special-empty">Aún no hay modelos A.1. ¡Pronto habrá novedades!</p>';
+                return;
+            }
+
+            // Mezclar productos
+            const shuffled = [...a1Products].sort(() => Math.random() - 0.5);
+            // Tomar 4 (o menos si hay menos)
+            const selected = shuffled.slice(0, 4);
+
+            container.innerHTML = selected.map(prod => {
+                const image = (prod.images && prod.images[0]) || 'https://via.placeholder.com/100x100?text=Gorra';
+                return `
+                    <div class="special-product-item" onclick="addToCart('${prod.name}', ${prod.price})">
+                        <img src="${image}" class="special-product-img" alt="${prod.name}">
+                        <div class="special-product-info">
+                            <div class="special-product-name">${prod.name}</div>
+                            <div class="special-product-price">$${prod.price}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function startSpecialBoxAnimation() {
+            if (specialBoxInterval) clearInterval(specialBoxInterval);
+            updateSpecialBox();
+            specialBoxInterval = setInterval(updateSpecialBox, 1000);
+        }
+
         // INICIALIZACIÓN
         initializeProducts();
         generateFilters();
         loadProducts();
         updateCartUI();
+        startSpecialBoxAnimation();
     </script>
 </body>
 </html>
