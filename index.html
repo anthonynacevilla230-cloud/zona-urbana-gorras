@@ -108,7 +108,7 @@
         .special-product-item { background: #111; border-radius: 8px; overflow: hidden; border: 1px solid #333; transition: transform 0.3s, border-color 0.3s; animation: fadeIn 0.5s; cursor: pointer; }
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
         .special-product-item:hover { transform: translateY(-3px); border-color: var(--accent-yellow); }
-        .special-product-img { width: 100%; height: 90px; object-fit: contain; background: #fff; }
+        .special-product-img { width: 100%; height: 90px; object-fit: contain; background: #fff; cursor: zoom-in; }
         .special-product-info { padding: 8px; }
         .special-product-name { font-size: 0.7rem; color: var(--text-white); font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .special-product-price { font-size: 0.8rem; color: var(--accent-yellow); font-weight: 900; margin-top: 3px; }
@@ -125,7 +125,6 @@
         .product-card { background-color: var(--bg-card); border-radius: 10px; overflow: hidden; border: 1px solid var(--border-color); position: relative; }
         .product-img-container { width: 100%; height: 250px; position: relative; overflow: hidden; background: #fff; }
         
-        /* IMAGEN CON CURSOR PARA INDICAR QUE SE PUEDE AMPLIAR */
         .product-img-container img { width: 100%; height: 100%; object-fit: contain; position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 0.3s; padding: 10px; cursor: zoom-in; }
         
         .product-img-container img.active { opacity: 1; }
@@ -226,14 +225,15 @@
         .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 30px; margin-bottom: 40px; }
         .footer-col h4 { color: var(--text-white); margin-bottom: 20px; font-size: 0.9rem; text-transform: uppercase; }
         .footer-col ul { list-style: none; }
-        .footer-col ul li { margin-bottom: 10px; font-size: 0.9rem; color: var(--text-gray); }
+        .footer-col ul li { margin-bottom: 10px; font-size: 0.9rem; color: var(--text-gray); cursor: pointer; transition: color 0.2s; }
+        .footer-col ul li:hover { color: var(--accent-yellow); }
         .footer-logo { display: flex; align-items: center; gap: 10px; font-weight: 900; font-size: 1.2rem; margin-bottom: 15px; }
         .footer-logo span { color: var(--accent-yellow); }
         .social-icons { display: flex; gap: 15px; margin-top: 20px; }
         .social-icons a { color: var(--text-gray); font-size: 1.2rem; }
         
         /* =========================================
-           ESTILOS PARA EL VISOR DE IMÁGENES (LIGHTBOX)
+           ESTILOS PARA EL VISOR DE IMÁGENES (LIGHTBOX) CON FLECHAS FORZADAS
            ========================================= */
         .image-modal {
             display: none;
@@ -275,16 +275,125 @@
             font-weight: bold;
             cursor: pointer;
             transition: color 0.2s;
+            z-index: 10001;
         }
         .image-modal-close:hover {
             color: var(--accent-yellow);
         }
+        
+        /* FLECHAS DEL VISOR FORZADAS A SER VISIBLES */
+        .image-modal-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--accent-yellow) !important;
+            color: #000 !important;
+            border: 3px solid #fff !important;
+            width: 60px !important;
+            height: 60px !important;
+            border-radius: 50% !important;
+            cursor: pointer !important;
+            z-index: 99999 !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            font-size: 2rem !important;
+            transition: all 0.2s;
+            box-shadow: 0 0 15px rgba(0,0,0,0.8) !important;
+        }
+        .image-modal-nav:hover {
+            background: #fff !important;
+            color: #000 !important;
+            border-color: var(--accent-yellow) !important;
+        }
+        .image-modal-nav.prev { left: 20px !important; }
+        .image-modal-nav.next { right: 20px !important; }
+        
         .image-modal-hint {
             position: absolute;
             bottom: 20px;
             color: #aaa;
             font-size: 0.9rem;
+            z-index: 10001;
         }
+
+        /* =========================================
+           ESTILOS PARA LOS MODALES DE INFORMACIÓN (TALLAS, MAYOREO)
+           ========================================= */
+        .info-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.85);
+            z-index: 6000;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .info-modal.active {
+            display: flex;
+            opacity: 1;
+        }
+        .info-box {
+            background-color: #1a1a1a;
+            border: 2px solid var(--accent-yellow);
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 0 30px rgba(0,0,0,0.8);
+        }
+        .info-box h3 {
+            color: var(--accent-yellow);
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+        .info-box p {
+            color: var(--text-gray);
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+            line-height: 1.7;
+        }
+        .info-box ul {
+            list-style: disc;
+            padding-left: 20px;
+            margin-bottom: 20px;
+            color: var(--text-gray);
+            font-size: 0.9rem;
+        }
+        .info-box ul li { margin-bottom: 8px; }
+        .info-box .info-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1.5rem;
+            color: white;
+            cursor: pointer;
+        }
+        .info-box .info-close:hover { color: var(--accent-yellow); }
+        .info-btn-whatsapp {
+            display: block;
+            text-align: center;
+            background-color: #27ae60;
+            color: white;
+            padding: 12px;
+            border-radius: 5px;
+            font-weight: 700;
+            margin-top: 20px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        .info-btn-whatsapp:hover { background-color: #219150; }
 
         @media (max-width: 992px) { 
             .hero-content { grid-template-columns: 1fr; } 
@@ -306,6 +415,7 @@
             .footer-grid { grid-template-columns: 1fr; gap: 40px; } 
             .brand-name { font-size: 1.5rem; } 
             .brand-logo-icon { width: 45px; height: 45px; font-size: 1.5rem; } 
+            .image-modal-nav { width: 45px !important; height: 45px !important; font-size: 1.5rem !important; }
         }
     </style>
 </head>
@@ -419,12 +529,73 @@
         </div>
     </div>
 
-    <!-- VISOR DE IMÁGENES (LIGHTBOX) -->
+    <!-- VISOR DE IMÁGENES (LIGHTBOX) CON FLECHAS DE NAVEGACIÓN -->
     <div id="imageModal" class="image-modal">
         <span class="image-modal-close" onclick="closeImageModal()">&times;</span>
+        <button class="image-modal-nav prev" onclick="changeModalImage(-1)"><i class="fas fa-chevron-left"></i></button>
         <img class="image-modal-img" id="imageModalImg" src="" alt="Imagen ampliada">
-        <div class="image-modal-hint">Haz clic fuera de la imagen para cerrar</div>
+        <button class="image-modal-nav next" onclick="changeModalImage(1)"><i class="fas fa-chevron-right"></i></button>
+        <div class="image-modal-hint">Usa las flechas o haz clic fuera para cerrar</div>
     </div>
+
+    <!-- MODAL DE GUÍA DE TALLAS -->
+    <div id="sizeModal" class="info-modal">
+        <div class="info-box">
+            <span class="info-close" onclick="closeInfoModal('sizeModal')">&times;</span>
+            <h3><i class="fas fa-ruler-combined"></i> Guía de Tallas</h3>
+            <p>Nuestras gorras están diseñadas con sistemas de ajuste para adaptarse a la mayoría de tallas. Aquí te explicamos cómo elegir la tuya según el sistema ecuatoriano y las medidas internacionales:</p>
+            <ul>
+                <li><strong>Snapback / Trucker:</strong> Cierre de broche ajustable. <strong>Talla única (Ajustable de 54cm a 61cm).</strong></li>
+                <li><strong>Flexfit (Elástica) S/M:</strong> <strong>55cm a 58cm.</strong> (Ideal para tallas pequeñas y medianas).</li>
+                <li><strong>Flexfit (Elástica) L/XL:</strong> <strong>58cm a 62cm.</strong> (Ideal para tallas grandes).</li>
+                <li><strong>Dad Hat / Curved:</strong> Cierre ajustable. <strong>Talla única (Ajustable de 54cm a 61cm).</strong></li>
+            </ul>
+            <p style="font-size: 0.85rem; color: #ccc; margin-top: 10px;"><strong>Consejo:</strong> Para medir tu cabeza, usa una cinta métrica flexible alrededor de la parte más ancha de tu cabeza (justo encima de las orejas). Si estás entre dos tallas, te recomendamos elegir la más grande.</p>
+        </div>
+    </div>
+
+    <!-- MODAL DE VENTAS AL POR MAYOR -->
+    <div id="wholesaleModal" class="info-modal">
+        <div class="info-box">
+            <span class="info-close" onclick="closeInfoModal('wholesaleModal')">&times;</span>
+            <h3><i class="fas fa-boxes"></i> Ventas al Por Mayor</h3>
+            <p>¿Tienes una tienda, equipo de fútbol, empresa o emprendimiento? <strong>¡Tenemos precios especiales para ti!</strong></p>
+            <p>Aprovecha nuestros descuentos exclusivos por volumen y lleva la mejor calidad en gorras urbanas a tu negocio o equipo.</p>
+            <p style="color: var(--text-white); font-weight: bold; margin-top: 20px;">¿Cómo comprar al por mayor?</p>
+            <ul>
+                <li>1. Revisa nuestro catálogo y <strong>agrega tus modelos favoritos al carrito</strong> (puedes añadir varias unidades).</li>
+                <li>2. Envíanos el pedido por WhatsApp con el resumen de tu carrito.</li>
+                <li>3. Nuestro equipo revisará tu pedido, calculará los precios personalizados al por mayor y se pondrá en contacto contigo para asesorarte en todo el proceso.</li>
+            </ul>
+            <a href="https://wa.me/593964103218?text=Hola%20Zona%20Urbana%2C%20estoy%20interesado%20en%20comprar%20al%20por%20mayor.%20Adjunto%20mi%20pedido." target="_blank" class="info-btn-whatsapp">
+                <i class="fab fa-whatsapp"></i> Contactar a un Asesor
+            </a>
+        </div>
+    </div>
+
+    <!-- MODAL DE POLÍTICAS DE DEVOLUCIÓN Y CAMBIOS -->
+    <div id="returnModal" class="info-modal">
+        <div class="info-box">
+            <span class="info-close" onclick="closeInfoModal('returnModal')">&times;</span>
+            <h3><i class="fas fa-undo-alt"></i> Políticas de Devolución y Cambios</h3>
+            
+            <p style="color: var(--accent-yellow); font-weight: 700;">Condiciones para Devoluciones:</p>
+            <ul>
+                <li>La prenda debe estar <strong>100% nueva, sin fallas ni rotos, y con todas sus etiquetas originales puestas</strong>, tal y como se envió.</li>
+                <li><strong>Evidencia:</strong> Nosotros enviamos fotos y videos de cómo sale la prenda. Al devolverla, el cliente debe enviar fotos de cómo la empaca y envía. Al recibirla, nosotros grabaremos evidencia de cómo nos llega.</li>
+                <li><strong>Reembolso:</strong> La devolución del dinero será del <strong>50% del valor real</strong> de la prenda, siempre y cuando cumpla con la condición del 100% de novedad y etiquetas.</li>
+            </ul>
+
+            <p style="color: var(--accent-yellow); font-weight: 700; margin-top: 20px;">Condiciones para Cambios:</p>
+            <ul>
+                <li>La prenda debe estar en las mismas condiciones exactas de novedad y con etiquetas.</li>
+                <li>El cambio se realizará por una prenda del <strong>mismo valor</strong>. Si la prenda nueva es de mayor valor, el cliente deberá <strong>pagar la diferencia</strong>.</li>
+                <li>El cliente debe enviar evidencia del estado de la prenda a devolver, y nosotros enviaremos evidencia de cómo nos llega.</li>
+            </ul>
+            <p style="font-size: 0.8rem; color: #aaa; margin-top: 15px; text-align: center;">Agradecemos tu comprensión y transparencia para poder brindarte un excelente servicio.</p>
+        </div>
+    </div>
+
 
     <div class="container">
         <div class="admin-panel" id="adminPanel">
@@ -606,7 +777,19 @@
                 </div>
             </div>
             <div class="footer-col"><h4>CATEGORÍAS</h4><ul><li><a href="#">Gorras Snapback</a></li><li><a href="#">Gorras Trucker Malla</a></li><li><a href="#">Dad Hats & Curved</a></li><li><a href="#">Beanies & Gorros</a></li><li><a href="#" style="color: var(--accent-yellow);">Bordados 3D</a></li></ul></div>
-            <div class="footer-col"><h4>ATENCIÓN AL CLIENTE</h4><ul><li><a href="#">Seguimiento de Envíos</a></li><li><a href="#">Políticas de Devolución</a></li><li><a href="#">Guía de Tallas</a></li><li><a href="#">Preguntas Frecuentes</a></li><li><a href="#">Ventas al Por Mayor</a></li></ul></div>
+            
+            <!-- CORRECCIÓN EN EL FOOTER -->
+            <div class="footer-col">
+                <h4>ATENCIÓN AL CLIENTE</h4>
+                <ul>
+                    <li onclick="event.stopPropagation(); openInfoModal('sizeModal')">Guía de Tallas</li>
+                    <li onclick="event.stopPropagation(); openInfoModal('returnModal')">Políticas de Devolución y Cambios</li>
+                    <li onclick="event.stopPropagation(); openInfoModal('wholesaleModal')">Ventas al Por Mayor</li>
+                    <li><a href="#">Seguimiento de Envíos</a></li>
+                    <li><a href="#">Preguntas Frecuentes</a></li>
+                </ul>
+            </div>
+            
             <div class="footer-col">
                 <h4>TIENDA FÍSICA & CONTACTO</h4>
                 <ul>
@@ -651,6 +834,10 @@
         let currentFilter = 'all';
         let specialBoxInterval = null;
         let allProducts = [];
+        
+        // Variables para controlar el visor de imágenes (Lightbox)
+        let currentModalImages = [];
+        let currentModalImageIndex = 0;
 
         const categorias = [
             { value: "snapback", label: "Snapback" },
@@ -973,19 +1160,44 @@
         const productGrid = document.getElementById('productGrid');
         const adminProductList = document.getElementById('adminProductList');
 
-        // FUNCIÓN PARA ABRIR EL VISOR DE IMÁGENES
-        window.openImageModal = function(imageSrc) {
+        // FUNCIÓN PARA ABRIR EL VISOR DE IMÁGENES (LIGHTBOX)
+        window.openImageModal = function(imageSrc, imagesArray = [], startIndex = 0) {
             const modal = document.getElementById('imageModal');
             const modalImg = document.getElementById('imageModalImg');
             modalImg.src = imageSrc;
+            currentModalImages = imagesArray;
+            currentModalImageIndex = startIndex;
             modal.classList.add('active');
+        };
+
+        // FUNCIÓN PARA ABRIR EL ZOOM DE LA IMAGEN ACTIVA DEL CARRUSEL CON CONTEXTO DE PRODUCTO
+        window.openImageModalByIndex = function(productId, index) {
+            const product = allProducts.find(p => p.id === productId);
+            if (product && product.images && product.images[index]) {
+                openImageModal(product.images[index], product.images, index);
+            }
+        };
+
+        // FUNCIÓN PARA CAMBIAR DE IMAGEN DENTRO DEL VISOR
+        window.changeModalImage = function(direction) {
+            if (!currentModalImages || currentModalImages.length <= 1) return;
+            
+            let newIndex = currentModalImageIndex + direction;
+
+            if (newIndex < 0) newIndex = currentModalImages.length - 1;
+            if (newIndex >= currentModalImages.length) newIndex = 0;
+
+            currentModalImageIndex = newIndex;
+            document.getElementById('imageModalImg').src = currentModalImages[newIndex];
         };
 
         // FUNCIÓN PARA CERRAR EL VISOR DE IMÁGENES
         window.closeImageModal = function() {
             const modal = document.getElementById('imageModal');
             modal.classList.remove('active');
-            setTimeout(() => { document.getElementById('imageModalImg').src = ''; }, 300); // Limpiar src después de la transición
+            currentModalImages = [];
+            currentModalImageIndex = 0;
+            setTimeout(() => { document.getElementById('imageModalImg').src = ''; }, 300);
         };
 
         // Cerrar modal al hacer clic fuera de la imagen
@@ -993,6 +1205,30 @@
             if (e.target === this) {
                 closeImageModal();
             }
+        });
+
+        // FUNCIONES PARA LOS MODALES DE INFORMACIÓN (TALLAS, MAYOREO, DEVOLUCIONES)
+        window.openInfoModal = function(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.add('active');
+            }
+        };
+
+        window.closeInfoModal = function(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.remove('active');
+            }
+        };
+
+        // Cerrar modales informativos al hacer clic fuera de ellos
+        document.querySelectorAll('.info-modal').forEach(modal => {
+            modal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeInfoModal(this.id);
+                }
+            });
         });
 
         function renderProducts(products) {
@@ -1010,8 +1246,10 @@
                     carouselHTML = `<button class="carousel-btn prev" onclick="changeImage(this, -1)"><i class="fas fa-chevron-left"></i></button><button class="carousel-btn next" onclick="changeImage(this, 1)"><i class="fas fa-chevron-right"></i></button>`;
                 }
                 
-                // Añadimos el evento onclick a las imágenes para abrir el modal
-                const imagesHTML = images.map((img, i) => `<img src="${img}" class="${i === 0 ? 'active' : ''}" alt="Gorra" onclick="openImageModal('${img}')">`).join('');
+                // Añadimos el evento onclick a cada imagen para que abra el zoom con su índice correcto
+                const imagesHTML = images.map((img, i) => {
+                    return `<img src="${img}" class="${i === 0 ? 'active' : ''}" alt="Gorra" onclick="openImageModalByIndex('${prod.id}', ${i})">`;
+                }).join('');
 
                 card.innerHTML = `<div class="product-img-container"><span class="tag">NUEVO</span>${imagesHTML}${carouselHTML}</div><div class="product-info"><div class="product-price"><div>$${prod.price || '29.99'}</div><button class="btn-add" onclick="addToCart('${prod.name || 'Modelo'}', ${prod.price || 29.99})"><i class="fas fa-shopping-cart"></i> Añadir</button></div><p style="color: var(--text-gray); font-size: 0.8rem; margin-top: 5px;">${prod.name || 'Modelo'}</p></div>`;
                 productGrid.appendChild(card);
@@ -1019,9 +1257,7 @@
         }
 
         window.changeImage = function(btn, direction) {
-            // Evitar que el clic en el botón del carrusel abra el modal de imagen
             event.stopPropagation(); 
-            
             const container = btn.closest('.product-img-container');
             const images = container.querySelectorAll('img');
             let activeIndex = -1;
@@ -1128,12 +1364,11 @@
             const shuffled = [...a1Products].sort(() => Math.random() - 0.5);
             const selected = shuffled.slice(0, 4);
 
-            // Añadimos el evento onclick a la imagen del recuadro especial
             container.innerHTML = selected.map(prod => {
                 const image = (prod.images && prod.images[0]) || 'https://via.placeholder.com/100x100?text=Gorra';
                 return `
                     <div class="special-product-item">
-                        <img src="${image}" class="special-product-img" alt="${prod.name}" onclick="openImageModal('${image}')">
+                        <img src="${image}" class="special-product-img" alt="${prod.name}" onclick="openImageModalByIndex('${prod.id}', 0)">
                         <div class="special-product-info" onclick="addToCart('${prod.name}', ${prod.price})">
                             <div class="special-product-name">${prod.name}</div>
                             <div class="special-product-price">$${prod.price}</div>
