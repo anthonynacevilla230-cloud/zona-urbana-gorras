@@ -233,6 +233,39 @@
         .social-icons a { color: var(--text-gray); font-size: 1.2rem; }
         
         /* =========================================
+           BOTÓN FLOTANTE DE WHATSAPP
+           ========================================= */
+        .whatsapp-float {
+            position: fixed;
+            width: 60px;
+            height: 60px;
+            bottom: 30px;
+            right: 30px;
+            background-color: #25d366;
+            color: #FFF;
+            border-radius: 50px;
+            text-align: center;
+            font-size: 30px;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+        }
+        .whatsapp-float:hover {
+            background-color: #128C7E;
+            color: #FFF;
+            transform: scale(1.1);
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+        }
+
+        /* =========================================
            ESTILOS PARA EL VISOR DE IMÁGENES (LIGHTBOX) CON FLECHAS FORZADAS
            ========================================= */
         .image-modal {
@@ -416,6 +449,7 @@
             .brand-name { font-size: 1.5rem; } 
             .brand-logo-icon { width: 45px; height: 45px; font-size: 1.5rem; } 
             .image-modal-nav { width: 45px !important; height: 45px !important; font-size: 1.5rem !important; }
+            .whatsapp-float { width: 50px; height: 50px; font-size: 25px; bottom: 20px; right: 20px; }
         }
     </style>
 </head>
@@ -778,7 +812,7 @@
             </div>
             <div class="footer-col"><h4>CATEGORÍAS</h4><ul><li><a href="#">Gorras Snapback</a></li><li><a href="#">Gorras Trucker Malla</a></li><li><a href="#">Dad Hats & Curved</a></li><li><a href="#">Beanies & Gorros</a></li><li><a href="#" style="color: var(--accent-yellow);">Bordados 3D</a></li></ul></div>
             
-            <!-- CORRECCIÓN EN EL FOOTER -->
+            <!-- CORRECCIÓN EN EL FOOTER: Se eliminó Preguntas Frecuentes -->
             <div class="footer-col">
                 <h4>ATENCIÓN AL CLIENTE</h4>
                 <ul>
@@ -786,7 +820,6 @@
                     <li onclick="event.stopPropagation(); openInfoModal('returnModal')">Políticas de Devolución y Cambios</li>
                     <li onclick="event.stopPropagation(); openInfoModal('wholesaleModal')">Ventas al Por Mayor</li>
                     <li><a href="#">Seguimiento de Envíos</a></li>
-                    <li><a href="#">Preguntas Frecuentes</a></li>
                 </ul>
             </div>
             
@@ -804,6 +837,11 @@
             &copy; 2026 Zona Urbana Caps. Todos los derechos reservados.
         </div>
     </footer>
+
+    <!-- BOTÓN FLOTANTE DE WHATSAPP -->
+    <a href="https://wa.me/593964103218?text=Hola%20Zona%20Urbana%2C%20tengo%20una%20consulta%20sobre%20las%20gorras." class="whatsapp-float" target="_blank" rel="noopener noreferrer">
+        <i class="fab fa-whatsapp"></i>
+    </a>
 
     <script>
         // ========================================
